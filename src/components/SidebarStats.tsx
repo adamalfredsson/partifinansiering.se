@@ -1,4 +1,4 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { INCOME_COLORS } from "../data/parties-config";
 import type { Party, RevenueGroup } from "../data/types";
 import { formatMillions } from "../lib/format";
@@ -91,8 +91,8 @@ export function SidebarStats({ parties, year, t, locale }: Props) {
               .toFixed(1)
               .replace(".", ",");
             return (
-              <Flex key={key} align="start" gap={4} minW={0}>
-                <Flex
+              <HStack key={key} align="start" gap={4} minW={0}>
+                <HStack
                   bg={INCOME_COLORS[key] ?? "#73777f"}
                   color="fg.inverted"
                   w={8}
@@ -107,7 +107,7 @@ export function SidebarStats({ parties, year, t, locale }: Props) {
                   flexShrink={0}
                 >
                   {String(i + 1).padStart(2, "0")}
-                </Flex>
+                </HStack>
                 <Box minW={0} flex={1}>
                   <Text textStyle="itemTitle" fontSize="sm">
                     {t(`revenue.${key}`)}
@@ -116,7 +116,7 @@ export function SidebarStats({ parties, year, t, locale }: Props) {
                     {formatMillions(amount)} ({pct}%)
                   </Text>
                 </Box>
-              </Flex>
+              </HStack>
             );
           })}
         </VStack>

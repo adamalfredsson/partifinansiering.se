@@ -1,4 +1,4 @@
-import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
+import { Box, HStack, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 import { PARTY_CONFIG } from "../data/parties-config";
 import type { Party } from "../data/types";
@@ -33,8 +33,8 @@ export function PartyCard({ party, year, lang, label }: Props) {
         w="4px"
         bg={partyColor}
       />
-      <Flex justify="space-between" align="start" mb={6}>
-        <Flex
+      <HStack justify="space-between" align="start" mb={6}>
+        <HStack
           w={10}
           h={10}
           bg={partyColor}
@@ -46,7 +46,7 @@ export function PartyCard({ party, year, lang, label }: Props) {
           fontWeight="900"
         >
           {config?.abbr ?? "?"}
-        </Flex>
+        </HStack>
         <Text
           as="span"
           className="material-symbols-outlined"
@@ -56,7 +56,7 @@ export function PartyCard({ party, year, lang, label }: Props) {
         >
           arrow_forward
         </Text>
-      </Flex>
+      </HStack>
       <Text textStyle="microLabel" color="fg.subtle" mb={1}>
         {label}
       </Text>

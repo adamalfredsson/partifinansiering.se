@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
@@ -11,7 +11,7 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
   const otherLang = lang === "sv" ? "en" : "sv";
 
   return (
-    <Flex direction="column" minH="100vh">
+    <VStack align="stretch" minH="100vh" gap={0}>
       {/* TopAppBar */}
       <Box
         as="header"
@@ -21,7 +21,7 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
         zIndex={50}
         layerStyle="appBar"
       >
-        <Flex
+        <HStack
           justify="space-between"
           align="center"
           w="full"
@@ -88,7 +88,7 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
               SV/EN
             </Link>
           </Text>
-        </Flex>
+        </HStack>
       </Box>
 
       {/* Main content */}
@@ -106,7 +106,7 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
       </Box>
 
       {/* Mobile Bottom Nav */}
-      <Flex
+      <HStack
         as="nav"
         display={{ base: "flex", md: "none" }}
         pos="fixed"
@@ -159,11 +159,11 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
             <Text textStyle="legend">{lang === "sv" ? "Om" : "About"}</Text>
           </VStack>
         </a>
-      </Flex>
+      </HStack>
 
       {/* Footer */}
       <Box as="footer" layerStyle="footer" w="full" mt="auto" py={12} px={6}>
-        <Flex
+        <Stack
           maxW="7xl"
           mx="auto"
           direction={{ base: "column", md: "row" }}
@@ -214,8 +214,8 @@ export function Layout({ children, lang = "sv" }: LayoutProps) {
               </a>
             ))}
           </Grid>
-        </Flex>
+        </Stack>
       </Box>
-    </Flex>
+    </VStack>
   );
 }

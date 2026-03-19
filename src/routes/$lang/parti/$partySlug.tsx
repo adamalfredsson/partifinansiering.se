@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Grid, HStack, Text } from "@chakra-ui/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { OrganizationTable } from "../../../components/OrganizationTable";
@@ -57,7 +57,7 @@ function PartyDetail() {
   return (
     <>
       {/* Back link */}
-      <Flex align="center" gap={2} mb={6}>
+      <HStack align="center" gap={2} mb={6}>
         <Text
           as="span"
           className="material-symbols-outlined"
@@ -76,11 +76,11 @@ function PartyDetail() {
             {t("party.back")}
           </Link>
         </Text>
-      </Flex>
+      </HStack>
 
       {/* Hero */}
-      <Flex align="center" gap={5} mb={8}>
-        <Flex
+      <HStack align="center" gap={5} mb={8}>
+        <HStack
           w={14}
           h={14}
           bg={partyColor}
@@ -92,7 +92,7 @@ function PartyDetail() {
           fontWeight="900"
         >
           {config?.abbr ?? "?"}
-        </Flex>
+        </HStack>
         <Box>
           <Text
             as="h1"
@@ -103,7 +103,7 @@ function PartyDetail() {
             {party.name}
           </Text>
         </Box>
-      </Flex>
+      </HStack>
 
       {/* Year selector */}
       <Box mb={10}>

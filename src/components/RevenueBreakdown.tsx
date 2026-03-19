@@ -1,4 +1,4 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { INCOME_COLORS } from "../data/parties-config";
 import { formatMillions } from "../lib/format";
 
@@ -28,14 +28,14 @@ export function RevenueBreakdown({
 
             return (
               <Box key={key}>
-                <Flex justify="space-between" align="end" mb={2} gap={4}>
+                <HStack justify="space-between" align="end" mb={2} gap={4}>
                   <Text textStyle="itemTitle" color="fg">
                     {t(`revenue.${key}`)}
                   </Text>
                   <Text textStyle="caption" color="fg.subtle">
                     {formatMillions(amount)} ({share.toFixed(0)}%)
                   </Text>
-                </Flex>
+                </HStack>
                 <Box bg="white" borderRadius="full" h={3} overflow="hidden">
                   <Box
                     h="full"

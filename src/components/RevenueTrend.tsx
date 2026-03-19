@@ -1,4 +1,4 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import type { Party } from "../data/types";
 import { formatMillions } from "../lib/format";
 
@@ -32,14 +32,14 @@ export function RevenueTrend({
       <VStack align="stretch" gap={4}>
         {series.map(({ year, total }) => (
           <Box key={year}>
-            <Flex justify="space-between" align="end" mb={2} gap={4}>
+            <HStack justify="space-between" align="end" mb={2} gap={4}>
               <Text textStyle="itemTitle" color="fg">
                 {year}
               </Text>
               <Text textStyle="caption" color="fg.subtle">
                 {formatMillions(total)}
               </Text>
-            </Flex>
+            </HStack>
             <Box bg="white" borderRadius="full" h={3} overflow="hidden">
               <Box
                 h="full"

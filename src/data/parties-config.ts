@@ -1,13 +1,48 @@
-/** Map party slug to abbreviation and color */
-export const PARTY_CONFIG: Record<string, { abbr: string; color: string }> = {
-  socialdemokraterna: { abbr: "S", color: "#ED1B34" },
-  moderaterna: { abbr: "M", color: "#52BDEC" },
-  sverigedemokraterna: { abbr: "SD", color: "#DDDD00" },
-  centerpartiet: { abbr: "C", color: "#009933" },
-  vansterpartiet: { abbr: "V", color: "#DA291C" },
-  kristdemokraterna: { abbr: "KD", color: "#000077" },
-  miljopartiet: { abbr: "MP", color: "#83CF39" },
-  liberalerna: { abbr: "L", color: "#006AB3" },
+/** Map party slug to abbreviation, color, and optional icon path (from public/) */
+export const PARTY_CONFIG: Record<
+  string,
+  { abbr: string; color: string; icon: string }
+> = {
+  socialdemokraterna: {
+    abbr: "S",
+    color: "#ED1B34",
+    icon: "/party-icons/socialdemokraterna.png",
+  },
+  moderaterna: {
+    abbr: "M",
+    color: "#52BDEC",
+    icon: "/party-icons/moderaterna.png",
+  },
+  sverigedemokraterna: {
+    abbr: "SD",
+    color: "#DDDD00",
+    icon: "/party-icons/sverigedemokraterna.png",
+  },
+  centerpartiet: {
+    abbr: "C",
+    color: "#009933",
+    icon: "/party-icons/centerpartiet.png",
+  },
+  vansterpartiet: {
+    abbr: "V",
+    color: "#DA291C",
+    icon: "/party-icons/vansterpartiet.png",
+  },
+  kristdemokraterna: {
+    abbr: "KD",
+    color: "#000077",
+    icon: "/party-icons/kristdemokraterna.png",
+  },
+  miljopartiet: {
+    abbr: "MP",
+    color: "#83CF39",
+    icon: "/party-icons/miljopartiet.png",
+  },
+  liberalerna: {
+    abbr: "L",
+    color: "#006AB3",
+    icon: "/party-icons/liberalerna.png",
+  },
 };
 
 export const INCOME_COLORS: Record<string, string> = {

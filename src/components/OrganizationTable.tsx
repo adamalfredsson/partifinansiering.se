@@ -1,4 +1,4 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import type { Organization } from "../data/types";
 import { formatMillions } from "../lib/format";
 
@@ -15,21 +15,21 @@ interface OrganizationTableProps {
 export function OrganizationTable({ orgs, year, t }: OrganizationTableProps) {
   return (
     <Box layerStyle="card" p={{ base: 6, md: 8 }}>
-      <Flex justify="space-between" align="end" gap={4} mb={6}>
+      <HStack justify="space-between" align="end" gap={4} mb={6}>
         <Text textStyle="sectionTitle" color="fg">
           {t("party.orgCount")}
         </Text>
         <Text textStyle="caption" color="fg.subtle">
           {year}
         </Text>
-      </Flex>
+      </HStack>
 
       <VStack align="stretch" gap={3}>
         {orgs.length === 0 ? (
           <Text color="fg.subtle">Ingen data</Text>
         ) : (
           orgs.map((org) => (
-            <Flex
+            <Stack
               key={org.orgNumber}
               justify="space-between"
               align={{ base: "start", md: "center" }}
@@ -51,7 +51,7 @@ export function OrganizationTable({ orgs, year, t }: OrganizationTableProps) {
               <Text textStyle="caption" color="fg.subtle">
                 {formatMillions(org.yearTotal)}
               </Text>
-            </Flex>
+            </Stack>
           ))
         )}
       </VStack>

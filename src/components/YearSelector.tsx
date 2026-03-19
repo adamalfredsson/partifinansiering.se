@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, HStack, Text } from "@chakra-ui/react";
 
 interface YearSelectorProps {
   years: number[];
@@ -14,11 +14,11 @@ export function YearSelector({
   label,
 }: YearSelectorProps) {
   return (
-    <Flex wrap="wrap" align="center" gap={4} mb={12}>
+    <HStack wrap="wrap" align="center" gap={4} mb={12}>
       <Text textStyle="label" color="fg.subtle">
         {label}
       </Text>
-      <Flex layerStyle="segmentGroup" p={1} gap={1}>
+      <HStack layerStyle="segmentGroup" p={1} gap={1}>
         {years.map((year) => {
           const isActive = year === selected;
           return (
@@ -40,7 +40,7 @@ export function YearSelector({
             </Box>
           );
         })}
-      </Flex>
-    </Flex>
+      </HStack>
+    </HStack>
   );
 }

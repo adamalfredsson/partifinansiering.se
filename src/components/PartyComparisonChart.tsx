@@ -1,7 +1,7 @@
 import * as ChakraCharts from "@chakra-ui/charts";
-import { Box, Flex, Text, Wrap } from "@chakra-ui/react";
+import { Box, HStack, Text, Wrap } from "@chakra-ui/react";
 import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
-import { INCOME_COLORS } from "../data/parties-config";
+import { INCOME_COLORS, PARTY_CONFIG } from "../data/parties-config";
 import type { Party, PartyYear } from "../data/types";
 import { formatMillions } from "../lib/format";
 
@@ -26,6 +26,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
 
   const chartData = partyData.map(({ party, yearData }) => ({
     name: party.name,
+    slug: party.slug,
     total: yearData.total,
     ...Object.fromEntries(
       Object.entries(yearData.revenue).filter(([, v]) => v > 0),
@@ -58,7 +59,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
 
   return (
     <Box layerStyle="card" p={{ base: 8, md: 12 }}>
-      <Flex justify="space-between" align="end" mb={10}>
+      <HStack justify="space-between" align="end" mb={10}>
         <Box>
           <Text textStyle="sectionTitle" color="fg" mb={2}>
             {t("chart.title")}
@@ -67,35 +68,75 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
             {t("chart.description")} {year}.
           </Text>
         </Box>
-      </Flex>
+      </HStack>
 
       <ChakraCharts.Chart.Root chart={chart}>
         <BarChart
           data={chart.data}
           layout="vertical"
-          margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+          margin={{ top: 4, right: 0, bottom: 4, left: 0 }}
           barCategoryGap={12}
           barSize={32}
           responsive
         >
           <XAxis type="number" hide />
           <Tooltip
-            content={
+            content={({ payload }) => (
               <ChakraCharts.Chart.Tooltip
+                label={payload?.[0]?.payload?.name}
                 formatter={(value, name) => [
                   formatMillions(Number(value)),
                   t(`revenue.${name}`),
                 ]}
               />
-            }
+            )}
           />
           <YAxis
             type="category"
-            dataKey="name"
-            width={160}
-            tick={{ fontSize: 14, fontWeight: 700 }}
+            dataKey="slug"
+            width={40}
             axisLine={false}
             tickLine={false}
+            tick={({ x, y, payload }) => {
+              const slug = payload?.value as string;
+              const config = PARTY_CONFIG[slug];
+              const color = config?.color ?? "#73777f";
+              const abbr = config?.abbr ?? "?";
+              const icon = config?.icon;
+              const size = 32;
+              return (
+                <g transform={`translate(${x},${y})`}>
+                  {icon ? (
+                    <image
+                      href={icon}
+                      x={-size}
+                      y={-size / 2}
+                      width={size}
+                      height={size}
+                      preserveAspectRatio="xMidYMid meet"
+                    />
+                  ) : (
+                    <foreignObject x={-40} y={-12} width={40} height={24}>
+                      <Box
+                        as="span"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        w={10}
+                        h={6}
+                        bg={color}
+                        rounded="md"
+                        color="white"
+                        fontSize="xs"
+                        fontWeight="900"
+                      >
+                        {abbr}
+                      </Box>
+                    </foreignObject>
+                  )}
+                </g>
+              );
+            }}
           />
           {allKeys.map((key) => (
             <Bar
@@ -104,7 +145,6 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
               stackId="revenue"
               fill={INCOME_COLORS[key] ?? "#73777f"}
               radius={0}
-              cursor="help"
             />
           ))}
         </BarChart>
@@ -120,7 +160,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
         borderColor="border.subtle"
       >
         {allKeys.map((key) => (
-          <Flex key={key} align="center" gap={2}>
+          <HStack key={key} align="center" gap={2}>
             <Box
               w={3}
               h={3}
@@ -130,7 +170,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
             <Text textStyle="legend" color="fg.muted">
               {t(`revenue.${key}`)}
             </Text>
-          </Flex>
+          </HStack>
         ))}
       </Wrap>
     </Box>
