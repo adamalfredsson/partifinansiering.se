@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.output/
+src/data/generated/
+src/routeTree.gen.ts
+*.local
+.worktrees/
+.playwright-mcp/
+.tanstack/
+tmp/
+pnpm-lock.yaml

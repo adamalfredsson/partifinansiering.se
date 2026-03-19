@@ -1,0 +1,865 @@
+<!doctype html>
+
+<html class="light" lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>partifinansiering.se — Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#90003b",
+              "primary-container": "#1a4670",
+              background: "#f7f9ff",
+              "on-secondary-fixed-variant": "#314a5b",
+              "tertiary-container": "#8b0039",
+              "secondary-fixed": "#cbe6fb",
+              "on-tertiary-fixed": "#3f0016",
+              "on-surface-variant": "#42474e",
+              "on-primary-fixed": "#001d36",
+              "on-secondary-container": "#4d6678",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f1f4fa",
+              "on-secondary": "#ffffff",
+              primary: "#002f54",
+              "surface-bright": "#f7f9ff",
+              "secondary-fixed-dim": "#b0cadf",
+              "inverse-on-surface": "#eef1f7",
+              "surface-tint": "#39618c",
+              "tertiary-fixed-dim": "#ffb2bf",
+              outline: "#73777f",
+              "inverse-surface": "#2d3135",
+              "on-background": "#181c20",
+              "on-primary-container": "#8db4e5",
+              "on-primary-fixed-variant": "#1e4973",
+              "inverse-primary": "#a2c9fb",
+              "on-secondary-fixed": "#011e2e",
+              "error-container": "#ffdad6",
+              "surface-variant": "#dfe3e8",
+              "surface-container-high": "#e5e8ee",
+              tertiary: "#620026",
+              "on-primary": "#ffffff",
+              "on-surface": "#181c20",
+              "primary-fixed-dim": "#a2c9fb",
+              "on-tertiary": "#ffffff",
+              "secondary-container": "#c9e3f9",
+              "surface-container-highest": "#dfe3e8",
+              "tertiary-fixed": "#ffd9de",
+              "outline-variant": "#c2c7d0",
+              "on-tertiary-container": "#ff90a8",
+              secondary: "#486173",
+              "surface-dim": "#d7dae0",
+              "on-error": "#ffffff",
+              "primary-fixed": "#d2e4ff",
+              "surface-container": "#ebeef4",
+              "on-error-container": "#93000a",
+              surface: "#f7f9ff",
+              error: "#ba1a1a",
+              "income-1": "#002f54",
+              "income-2": "#2d7a91",
+              "income-3": "#6b4fa0",
+              "income-4": "#e67e22",
+              "income-5": "#d81b60",
+              "income-6": "#f06292",
+              "income-7": "#73777f",
+              "party-s": "#ED1B34",
+              "party-m": "#52BDEC",
+              "party-sd": "#DDDD00",
+              "party-c": "#009933",
+              "party-v": "#DA291C",
+              "party-kd": "#000077",
+              "party-mp": "#83CF39",
+              "party-l": "#006AB3",
+            },
+            fontFamily: {
+              headline: ["Manrope"],
+              body: ["Inter"],
+              label: ["Inter"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .backdrop-glass {
+        backdrop-filter: blur(12px);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background font-body text-on-background min-h-screen flex flex-col"
+  >
+    <!-- TopAppBar -->
+    <header
+      class="bg-white/80 dark:bg-[#002f54]/80 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-[#dfe3e8]/20 shadow-sm dark:shadow-none"
+    >
+      <div
+        class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto"
+      >
+        <div
+          class="text-xl font-black text-[#002f54] dark:text-white tracking-tighter font-headline"
+        >
+          partifinansiering.se
+        </div>
+        <nav
+          class="hidden md:flex items-center space-x-8 font-headline font-bold tracking-tight"
+        >
+          <a
+            class="text-[#002f54] dark:text-white border-b-2 border-[#002f54] dark:border-[#2d7a91] pb-1"
+            href="#"
+          >
+            Översikt
+          </a>
+          <a
+            class="text-[#73777f] dark:text-[#f1f4fa] hover:text-[#002f54] transition-colors"
+            href="#"
+          >
+            Partier
+          </a>
+          <a
+            class="text-[#73777f] dark:text-[#f1f4fa] hover:text-[#002f54] transition-colors"
+            href="#"
+          >
+            Om
+          </a>
+        </nav>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-on-surface-variant font-bold text-sm px-3 py-1 hover:bg-[#f1f4fa] rounded-md transition-all"
+          >
+            SV/EN
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="flex-grow pt-28 pb-20 px-6 max-w-7xl mx-auto w-full">
+      <!-- Hero Section -->
+      <section class="mb-12">
+        <h1
+          class="font-headline font-extrabold text-4xl md:text-5xl text-on-surface tracking-tighter mb-8 max-w-2xl"
+        >
+          Så finansieras Sveriges partier
+        </h1>
+        <!-- Year Selector (Segmented Control) -->
+        <div class="flex flex-wrap items-center gap-4 mb-12">
+          <span
+            class="font-label text-xs uppercase tracking-widest text-outline font-semibold"
+          >
+            Välj räkenskapsår
+          </span>
+          <div
+            class="bg-surface-container-high p-1 rounded-xl flex gap-1 shadow-inner"
+          >
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2018
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2019
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2020
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2021
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2022
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg bg-surface-container-lowest text-primary shadow-sm text-sm font-extrabold transition-all"
+            >
+              2023
+            </button>
+            <button
+              class="px-5 py-2 rounded-lg text-sm font-bold text-outline hover:text-primary transition-all"
+            >
+              2024
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Visualization Canvas -->
+        <div class="lg:col-span-8 space-y-12">
+          <div
+            class="bg-surface-container-low rounded-[2rem] p-8 md:p-12 relative overflow-hidden"
+          >
+            <div class="flex justify-between items-end mb-10">
+              <div>
+                <h2
+                  class="font-headline text-2xl font-bold text-on-surface mb-2"
+                >
+                  Intäktskällor per parti
+                </h2>
+                <p class="text-on-surface-variant text-sm max-w-md">
+                  Fördelning av totala intäkter baserat på Kammarkollegiets
+                  rapportering för 2023.
+                </p>
+              </div>
+            </div>
+            <!-- Horizontal Stacked Bar Chart -->
+            <div class="space-y-6">
+              <!-- Party Row: S -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Socialdemokraterna
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    482,4 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[35%]"
+                    title="Offentligt stöd: 168.8M (35%)"
+                  ></div>
+                  <div
+                    class="h-full bg-income-3 w-[45%]"
+                    title="Försäljning &amp; lotterier: 217.1M (45%)"
+                  ></div>
+                  <div
+                    class="h-full bg-income-2 w-[12%]"
+                    title="Medlemsavgifter: 57.9M (12%)"
+                  ></div>
+                  <div
+                    class="h-full bg-income-7 w-[8%]"
+                    title="Övrigt: 38.6M (8%)"
+                  ></div>
+                </div>
+              </div>
+              <!-- Party Row: M -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Moderaterna
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    194,2 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[55%]"
+                    title="Offentligt stöd"
+                  ></div>
+                  <div class="h-full bg-income-5 w-[25%]" title="Bidrag"></div>
+                  <div
+                    class="h-full bg-income-2 w-[15%]"
+                    title="Medlemsavgifter"
+                  ></div>
+                  <div class="h-full bg-income-7 w-[5%]" title="Övrigt"></div>
+                </div>
+              </div>
+              <!-- Party Row: SD -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Sverigedemokraterna
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    156,8 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[85%]"
+                    title="Offentligt stöd"
+                  ></div>
+                  <div
+                    class="h-full bg-income-2 w-[10%]"
+                    title="Medlemsavgifter"
+                  ></div>
+                  <div class="h-full bg-income-7 w-[5%]" title="Övrigt"></div>
+                </div>
+              </div>
+              <!-- Party Row: C -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Centerpartiet
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    142,5 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[40%]"
+                    title="Offentligt stöd"
+                  ></div>
+                  <div
+                    class="h-full bg-income-7 w-[50%]"
+                    title="Övrigt/Kapital"
+                  ></div>
+                  <div
+                    class="h-full bg-income-2 w-[10%]"
+                    title="Medlemsavgifter"
+                  ></div>
+                </div>
+              </div>
+              <!-- Party Row: V -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Vänsterpartiet
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    89,1 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[60%]"
+                    title="Offentligt stöd"
+                  ></div>
+                  <div
+                    class="h-full bg-income-2 w-[30%]"
+                    title="Medlemsavgifter/Partiskatt"
+                  ></div>
+                  <div class="h-full bg-income-7 w-[10%]" title="Övrigt"></div>
+                </div>
+              </div>
+              <!-- Party Row: KD -->
+              <div class="space-y-2 group">
+                <div class="flex justify-between items-end">
+                  <span class="font-headline font-bold text-sm">
+                    Kristdemokraterna
+                  </span>
+                  <span class="font-body font-semibold text-xs text-outline">
+                    64,3 mnkr
+                  </span>
+                </div>
+                <div
+                  class="h-8 w-full bg-surface-container-highest rounded-md flex overflow-hidden cursor-help ring-primary/0 hover:ring-2 hover:ring-primary/20 transition-all"
+                >
+                  <div
+                    class="h-full bg-income-1 w-[75%]"
+                    title="Offentligt stöd"
+                  ></div>
+                  <div
+                    class="h-full bg-income-2 w-[15%]"
+                    title="Medlemsavgifter"
+                  ></div>
+                  <div class="h-full bg-income-5 w-[10%]" title="Bidrag"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Legend -->
+            <div
+              class="mt-12 flex flex-wrap gap-x-6 gap-y-3 pt-8 border-t border-outline-variant/20"
+            >
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-1"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Offentligt stöd
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-2"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Medlemsavgifter
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-3"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Försäljning &amp; lotterier
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-4"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Insamling
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-5"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Bidrag
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-6"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Bidrag – närstående
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-income-7"></span>
+                <span
+                  class="text-[11px] font-label font-semibold text-on-surface-variant uppercase tracking-wider"
+                >
+                  Övrigt
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar Statistics -->
+        <div class="lg:col-span-4 space-y-6">
+          <div class="bg-primary text-white p-8 rounded-[2rem] shadow-xl">
+            <span
+              class="font-label text-xs uppercase tracking-[0.2em] opacity-70 font-bold mb-4 block"
+            >
+              Total Finansiering 2023
+            </span>
+            <div
+              class="font-headline text-5xl font-extrabold tracking-tighter mb-2"
+            >
+              1,24
+              <span class="text-2xl font-bold opacity-80">mdr SEK</span>
+            </div>
+            <p class="text-sm opacity-80 font-medium">
+              En ökning med 4,2% jämfört med föregående räkenskapsår.
+            </p>
+          </div>
+          <div class="bg-surface-container-highest p-8 rounded-[2rem]">
+            <h3 class="font-headline font-bold text-lg mb-6 text-primary">
+              Topp 3 inkomstkällor
+            </h3>
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <div
+                  class="bg-income-1 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0"
+                >
+                  01
+                </div>
+                <div>
+                  <div class="font-bold text-sm">Offentligt stöd</div>
+                  <div class="text-xs text-outline font-medium">
+                    684,2 mnkr (55,1%)
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="bg-income-3 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0"
+                >
+                  02
+                </div>
+                <div>
+                  <div class="font-bold text-sm">
+                    Försäljning &amp; lotterier
+                  </div>
+                  <div class="text-xs text-outline font-medium text-wrap">
+                    248,9 mnkr (20,1%)
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="bg-income-2 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0"
+                >
+                  03
+                </div>
+                <div>
+                  <div class="font-bold text-sm">Medlemsavgifter</div>
+                  <div class="text-xs text-outline font-medium">
+                    152,4 mnkr (12,3%)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Party Grid -->
+      <section class="mt-20">
+        <h2 class="font-headline text-2xl font-bold text-on-surface mb-8">
+          Partiöversikt
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- S -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-s"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-s rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                S
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-s transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              482 390 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- M -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-m"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-m rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                M
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-m transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              194 210 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- SD -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-sd"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-sd rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                SD
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-sd transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              156 805 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- C -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-c"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-c rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                C
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-c transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              142 530 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- V -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-v"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-v rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                V
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-v transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              89 120 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- KD -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-kd"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-kd rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                KD
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-kd transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              64 330 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- MP -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-mp"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-mp rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                MP
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-mp transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              58 200 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+          <!-- L -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-2xl relative overflow-hidden group hover:shadow-md transition-all"
+          >
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-party-l"></div>
+            <div class="flex justify-between items-start mb-6">
+              <span
+                class="w-10 h-10 bg-party-l rounded-lg flex items-center justify-center text-white font-black font-headline"
+              >
+                L
+              </span>
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-party-l transition-colors"
+                data-icon="arrow_forward"
+              >
+                arrow_forward
+              </span>
+            </div>
+            <div
+              class="font-label text-[10px] uppercase tracking-widest text-outline font-bold mb-1"
+            >
+              Totala intäkter
+            </div>
+            <div class="font-headline text-xl font-extrabold text-on-surface">
+              54 110 000
+              <span class="text-xs font-bold text-outline">kr</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-white/90 dark:bg-[#002f54]/95 backdrop-blur-md border-t border-[#dfe3e8] dark:border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 rounded-t-2xl"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-[#002f54] dark:text-white bg-[#f1f4fa] dark:bg-[#1a4670] rounded-xl px-4 py-1"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="dashboard">
+          dashboard
+        </span>
+        <span
+          class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider"
+        >
+          Översikt
+        </span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#73777f] dark:text-[#dfe3e8] px-4 py-1"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="groups">groups</span>
+        <span
+          class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider"
+        >
+          Partier
+        </span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#73777f] dark:text-[#dfe3e8] px-4 py-1"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="timeline">
+          timeline
+        </span>
+        <span
+          class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider"
+        >
+          Historik
+        </span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#73777f] dark:text-[#dfe3e8] px-4 py-1"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="info">info</span>
+        <span
+          class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider"
+        >
+          Om
+        </span>
+      </a>
+    </nav>
+    <!-- Footer -->
+    <footer class="bg-[#f1f4fa] dark:bg-[#002f54] w-full mt-auto py-12 px-6">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8"
+      >
+        <div class="space-y-4">
+          <div class="font-bold text-[#002f54] dark:text-white text-lg">
+            partifinansiering.se
+          </div>
+          <p
+            class="font-['Inter'] text-sm leading-relaxed text-[#73777f] dark:text-[#dfe3e8] max-w-sm"
+          >
+            En oberoende granskning av hur de politiska partierna finansieras.
+            Baserat på officiell data från Kammarkollegiets Partiinsyn.
+          </p>
+          <div
+            class="text-[#73777f] dark:text-[#dfe3e8] font-['Inter'] text-xs opacity-70"
+          >
+            © 2024 partifinansiering.se — Data från Kammarkollegiets Partiinsyn
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-x-12 gap-y-4 font-['Inter'] text-sm">
+          <a
+            class="text-[#73777f] dark:text-[#dfe3e8] opacity-70 hover:opacity-100 transition-opacity"
+            href="#"
+          >
+            Metodologi
+          </a>
+          <a
+            class="text-[#73777f] dark:text-[#dfe3e8] opacity-70 hover:opacity-100 transition-opacity"
+            href="#"
+          >
+            API
+          </a>
+          <a
+            class="text-[#73777f] dark:text-[#dfe3e8] opacity-70 hover:opacity-100 transition-opacity"
+            href="#"
+          >
+            Kontakt
+          </a>
+          <a
+            class="text-[#73777f] dark:text-[#dfe3e8] opacity-70 hover:opacity-100 transition-opacity"
+            href="#"
+          >
+            Press
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
