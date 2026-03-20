@@ -4,9 +4,9 @@
 
 **Goal:** Add a two-stage pipeline (discovery → extracted proposed/validated JSON + archived PDFs) and surface annual reports on party pages, integrated with the existing static TanStack Start site.
 
-**Architecture:** Curated `partyId → kansli orgnr` config is read by a Node script that calls Bolagsverket’s API (per current docs) at CI/build time, writes discovery JSON, downloads PDFs (Git LFS recommended). A second script extracts text from PDFs, calls an LLM with a strict schema, writes `proposed` JSON; humans merge to `validated` JSON. The app loads only `validated` for metrics and discovery for links/PDF paths.
+**Architecture:** Curated `partyId → kansli orgnr` config is read by a Node script that **scrapes Bolagsverket’s public website** (not the paid API) using **Crawlee** (Playwright) or **Stagehand** (AI-guided browser), writes discovery JSON, downloads PDFs (Git LFS recommended). Crawl is intentionally **off the default `vite build` path**—run on a schedule or manually, then commit artifacts. A second script extracts text from PDFs, calls an LLM with a strict schema, writes `proposed` JSON; humans merge to `validated` JSON. The app loads only `validated` for metrics and discovery for links/PDF paths.
 
-**Tech Stack:** TypeScript, `tsx`, existing Vitest; new deps as needed (HTTP client, PDF text extraction, LLM SDK, optional Zod/Effect Schema for validation). Chakra UI for UI.
+**Tech Stack:** TypeScript, `tsx`, existing Vitest; **Crawlee + playwright** *or* **@browserbasecom/stagehand** (+ Playwright); PDF text extraction; LLM SDK for extraction (and for Stagehand if used for discovery); optional Zod/Effect Schema for validation. Chakra UI for UI.
 
 ---
 
@@ -51,7 +51,7 @@
 - Create: `src/data/generated/annual-reports.discovery.json` (initial empty structure `[]` or `{ "parties": [] }` — match types)
 - Modify: `package.json` — add `"discover-annual-reports": "tsx scripts/discover-annual-reports.ts"`
 
-**Step 1:** Read `party-headquarters` config; for each row, placeholder function `fetchAnnualReportsFromBolagsverket(orgNumber): Promise<...>` (stub returning `[]`).
+**Step 1:** Read `party-headquarters` config; for each row, placeholder `discoverAnnualReportsForOrg(orgNumber): Promise<...>` (stub returning `[]`) to be implemented by the crawler in Task 4.
 
 **Step 2:** Write merged result to `src/data/generated/annual-reports.discovery.json` with stable sorting (partyId, year desc).
 
@@ -61,21 +61,24 @@
 
 ---
 
-### Task 4: Implement Bolagsverket client (read official docs first)
+### Task 4: Implement Bolagsverket web discovery (Crawlee or Stagehand)
 
 **Files:**
 
-- Create: `scripts/bolagsverket-client.ts` (or under `scripts/lib/`)
-- Modify: `scripts/discover-annual-reports.ts` — use real client
-- Create: `.env.example` — `BOLAGSVERKET_API_KEY=`, base URL if applicable
+- Create: `scripts/crawl/bolagsverket-annual-reports.ts` (or `scripts/discover-annual-reports-crawler.ts`) — crawler entry
+- Modify: `scripts/discover-annual-reports.ts` — call crawler implementation
+- Create: `.env.example` — if **Stagehand**: `OPENAI_API_KEY=` / `ANTHROPIC_API_KEY=` (per Stagehand docs); if **Crawlee only**: optional throttling env vars only
+- Modify: `package.json` — add deps: `crawlee` + `playwright` *or* `@browserbasecom/stagehand` + peer browser deps; add `postinstall` or README step: `pnpm exec playwright install chromium` (exact package per chosen stack)
 
-**Step 1:** Read current Bolagsverket API documentation; implement minimal client: list/search annual accounts for an org number, map response to `AnnualReportDiscoveryEntry` (year, sourceUrl, documentId, downloadedPath null until Task 5).
+**Step 1:** **Pick stack:** Crawlee for deterministic flows (recommended default); Stagehand if selectors are brittle and you accept LLM cost in discovery.
 
-**Step 2:** Integration test optional behind `process.env.CI` skip if no key in test env; or record fixture JSON in `scripts/fixtures/bolagsverket/` for unit tests.
+**Step 2:** Map the real user journey on `bolagsverket.se` (org search → annual report list → PDF or document page URLs). Implement one `RequestHandler` / Playwright flow that returns `AnnualReportDiscoveryEntry[]` per orgnr (year, `sourcePageUrl`, `pdfUrl` if direct link exists, raw title text).
 
-**Step 3:** Run script locally with key — expect non-empty discovery for at least one org.
+**Step 3:** Add **fixture tests:** save redacted HTML snippets or recorded responses under `scripts/fixtures/bolagsverket-web/` and unit-test parsing logic so CI does not hit the live site every run.
 
-**Step 4:** Commit (no secrets).
+**Step 4:** Run crawler locally with Playwright browsers installed — expect non-empty discovery for at least one HQ orgnr.
+
+**Step 5:** Commit (no secrets).
 
 ---
 
@@ -86,7 +89,7 @@
 - Modify: `scripts/discover-annual-reports.ts`
 - Modify: discovery types if needed (`localPdfRelativePath`)
 
-**Step 1:** For each discovered document URL, download PDF to `data/annual-reports/{orgNumber}-{year}.pdf` (or hashed name if collisions); skip if already exists with same size/etag if API provides checksum.
+**Step 1:** For each discovered PDF URL, download with `fetch` or Playwright context to `data/annual-reports/{orgNumber}-{year}.pdf` (or hashed name if collisions); skip if file exists and `Content-Length`/checksum matches when headers allow.
 
 **Step 2:** Record relative path in discovery JSON for static serving decision.
 
@@ -143,9 +146,9 @@
 **Files:**
 
 - Modify: `package.json` — decide whether `build` runs `discover-annual-reports` always or only `build:data` script
-- Modify: CI workflow if present (e.g. `.github/workflows/*.yml`) — add secrets, `git lfs pull`, run discovery on schedule or on release
+- Modify: CI workflow if present — optional **scheduled** job with `playwright install`, `git lfs pull`, run `discover-annual-reports`; on failure notify (site markup changes)
 
-**Step 1:** Prefer explicit `pnpm run build:data` chaining: `process-data` + `discover-annual-reports` before `vite build` **or** document manual cadence to avoid flaky builds without API key.
+**Step 1:** Keep `vite build` chained only with `process-data` (Partiinsyn). Add separate `pnpm run discover-annual-reports` (and optionally `pnpm run build:data` = `process-data` only) — **do not** require Playwright crawl on every production build unless you add a dedicated CI job with browser cache and accept flake risk.
 
 **Step 2:** Commit.
 
@@ -191,7 +194,7 @@
 
 **Files:**
 
-- Modify: `README.md` or `AGENTS.md` — how to run discovery/extract, LFS, env vars
+- Modify: `README.md` or `AGENTS.md` — how to run discovery (Playwright install, Crawlee vs Stagehand), extract (LLM key), LFS, env vars
 - Modify: `docs/plans/2026-03-18-partifinansiering-design.md` — one-line “see 2026-03-20-arsredovisningar-design.md” under complementary sources
 
 **Step 1:** Commit.
@@ -200,7 +203,7 @@
 
 ### Task 12: Final verification
 
-**Step 1:** Run `pnpm typecheck && pnpm test && pnpm build` (with or without API keys per documented flow).
+**Step 1:** Run `pnpm typecheck && pnpm test && pnpm build`. Crawler smoke test remains manual or scheduled CI (not required for every local build).
 
 **Step 2:** Commit any fixes.
 

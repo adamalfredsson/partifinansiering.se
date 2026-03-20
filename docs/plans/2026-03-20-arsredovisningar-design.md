@@ -11,9 +11,12 @@ Komplettera befintlig Partiinsyn-data (intäkter) med **partikansliers årsredov
 
 ## Datakällor och discovery
 
-- **Primär källa:** Bolagsverket (automation utifrån orgnr), i enlighet med deras **aktuella API- och användarvillkor** (nyckel och gränser hanteras i CI/hemligheter, aldrig i klienten).
-- **Discovery-skript** (build/CI): söker fram årsredovisningar per mappat orgnr och år, sparar **kanonisk metadata** (år, dokumentreferens, URL, ev. filnamn) till JSON i repot.
-- **PDF:er:** laddas ner och versioneras i repot; vid växande volym rekommenderas **Git LFS** för PDF-binärer så huvudrepot inte sväller onödigt.
+- **Primär källa:** Bolagsverkets **publika webb** (samma handlingar som API:et pekar på), inte det **kostnadsbelagda API:et**. Discovery görs genom **skrapning** med headless browser / crawl-ramverk.
+- **Rekommenderade verktyg (välj en väg i implementation):**
+  - **[Crawlee](https://crawlee.dev/)** + Playwright: köer, retry, rate limiting, bra när flödet går att uttrycka som stabila selektorer/navigering.
+  - **[Stagehand](https://github.com/browserbase/stagehand)** (eller liknande AI-styrd browser): användbart om UI:t är svårfångat med enbart CSS/XPath eller ofta ändras — kan medföra LLM-kostnad redan i discovery-skiktet.
+- **Discovery-skript** (build/CI eller manuellt vid behov): för varje mappat orgnr, navigera Bolagsverkets webb, hitta årsredovisningar per år, spara **kanonisk metadata** (år, sid-URL, direkt PDF-URL om sådan finns, ev. dokumentnamn) till JSON i repot.
+- **PDF:er:** laddas ner via HTTP från URL:er discovery hittat; versioneras i repot; vid växande volym rekommenderas **Git LFS** för PDF-binärer så huvudrepot inte sväller onödigt.
 
 ### Manuellt underlag
 
@@ -21,11 +24,11 @@ CSV:n innehåller många organisationer. För att undvika fel bolag krävs en **
 
 ## Artefakter (JSON i repo)
 
-| Fil | Innehåll |
-| --- | --- |
-| `annual-reports.discovery.json` (namn kan preciseras i implementation) | Per parti/orgnr/år: källor, URL:er, lokal sökväg till PDF om nedladdad, tidsstämplar/rå metadata från API. |
-| `annual-reports.extracted.proposed.json` | LLM:ens tolkning enligt fast schema (för parsebarhet och diff). **Committad** (spårbarhet). |
-| `annual-reports.extracted.validated.json` | Redaktionellt godkänd data som **sajten läser** för diagram/tabeller. |
+| Fil                                                                    | Innehåll                                                                                                   |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `annual-reports.discovery.json` (namn kan preciseras i implementation) | Per parti/orgnr/år: källor, URL:er, lokal sökväg till PDF om nedladdad, tidsstämplar/rå metadata från crawl. |
+| `annual-reports.extracted.proposed.json`                               | LLM:ens tolkning enligt fast schema (för parsebarhet och diff). **Committad** (spårbarhet).                |
+| `annual-reports.extracted.validated.json`                              | Redaktionellt godkänd data som **sajten läser** för diagram/tabeller.                                      |
 
 Både **proposed** och **validated** committas (val A): PR:er kan visa vad modellen föreslagit jämfört med senaste validerade versionen.
 
@@ -45,8 +48,9 @@ Både **proposed** och **validated** committas (val A): PR:er kan visa vad model
 
 ## Körning
 
-- **Byggtid / CI** (inte webbläsare): discovery och nedladdning körs med secrets; statisk sajt shippar med checkade JSON-filer (+ statiska PDF:er under t.ex. `public/` eller motsvarande).
-- Lokalt: samma skript med env-filer som inte committas (`.env.example` dokumenterar variabler).
+- **Byggtid / CI:** discovery kräver **headless browser** (Playwright-installation i CI) och ev. längre körning än rent HTTP — överväg **inte** köra crawl vid varje `vite build`; kör på schema/manuellt och committa uppdaterad JSON/PDF.
+- **Secrets:** inget Bolagsverket-API; om ni använder Stagehand behövs API-nyckel till vald LLM-leverantör i discovery-steget (dokumentera i `.env.example`).
+- Lokalt: samma skript; `.env.example` listar ev. LLM-nyckel + inställningar för crawl.
 
 ## UI (riktlinje)
 
@@ -55,14 +59,16 @@ Både **proposed** och **validated** committas (val A): PR:er kan visa vad model
 
 ## Felhantering
 
-- **Saknat år** i API: notera i discovery-JSON (tom post eller flagga); UI visar inte falsk data.
-- **Nedladdnings-/API-fel i CI:** antingen faila jobbet (strikt) eller skriv varning + oförändrad snapshot (mjukt); välj policy explicit i implementation — rekommendation är **strikt för release** så sajten inte tyst tappar filer.
-- **LLM bryter schema:** skript exit code ≠ 0; ingen skrivning till proposed eller manuell åtgärd.
+- **Saknat år** efter crawl: notera i discovery-JSON (tom post eller flagga); UI visar inte falsk data.
+- **DOM-/flödesändring på Bolagsverkets sajt:** crawl failar eller returnerar ofullständig data — versionslås selektorer, spara **HTML-fixtures** i tester, och övervaka med manuell körning innan merge av ny discovery-data.
+- **Rate limit / bot-skydd:** respektera rimlig concurrency och backoff; undvik onödig belastning.
+- **Nedladdningsfel (PDF):** samma policy som tidigare — rekommendation **strikt** vid data-PR så inget tyst tappas.
+- **LLM bryter schema (extraktion):** skript exit code ≠ 0; ingen skrivning till proposed eller manuell åtgärd.
 
 ## Juridik och kvalitet
 
-- Följ Bolagsverkets villkor för API och återpublicering av handlingar.
-- Tydlig **attribution** i UI: källa och år ska alltid framgå.
+- Kontrollera Bolagsverkets **användarvillkor / robots.txt** för webbåtkomst; skrapning ersätter inte juridisk rådgivning — minimera belastning, cacha resultat i repot, länka till original.
+- Tydlig **attribution** i UI: källa (Bolagsverket) och år ska alltid framgå.
 - Validated JSON är **redaktionellt ansvar**; proposed är **förslag**.
 
 ## Relation till befintlig design
@@ -71,4 +77,4 @@ Utökar [2026-03-18-partifinansiering-design.md](./2026-03-18-partifinansiering-
 
 ## Godkännande
 
-Designen ovan speglar brainstorm: omfattning partikansli, automation i CI, PDF i repo (LFS rekommenderat vid volym), två skript (discovery + extraktion), LLM med mänsklig validering, committad proposed + validated.
+Designen ovan speglar brainstorm: omfattning partikansli, **discovery via webbskrapning** (Crawlee eller Stagehand), PDF i repo (LFS rekommenderat vid volym), två skript (discovery + extraktion), LLM med mänsklig validering, committad proposed + validated.
