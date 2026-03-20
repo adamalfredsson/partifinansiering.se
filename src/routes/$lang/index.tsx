@@ -1,16 +1,20 @@
-import { Box, ClientOnly, Grid, Text } from "@chakra-ui/react";
+import { Box, ClientOnly, Grid, Stack, Text } from "@chakra-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { PartyCard } from "../../components/PartyCard";
 import { PartyComparisonChart } from "../../components/PartyComparisonChart";
 import { SidebarStats } from "../../components/SidebarStats";
+import { SiteLogo } from "../../components/SiteLogo";
+import { TopDonorsCard } from "../../components/TopDonorsCard";
 import { YearSelector } from "../../components/YearSelector";
+import { useYear } from "../../context/YearContext";
 import metaData from "../../data/generated/meta.json";
 import partiesData from "../../data/generated/parties.json";
-import type { Party } from "../../data/types";
+import topDonorsData from "../../data/generated/top-donors.json";
+import type { Party, TopDonorsByYear } from "../../data/types";
 import { getTranslation } from "../../i18n/useTranslation";
 
 const parties = partiesData as Party[];
+const topDonorsByYear = topDonorsData as TopDonorsByYear;
 
 export const Route = createFileRoute("/$lang/")({
   component: Dashboard,
@@ -19,31 +23,33 @@ export const Route = createFileRoute("/$lang/")({
 function Dashboard() {
   const { lang } = Route.useParams();
   const { t, locale } = getTranslation(lang);
-  const [selectedYear, setSelectedYear] = useState(
-    metaData.years[metaData.years.length - 1],
-  );
+  const { selectedYear, setSelectedYear } = useYear();
 
   return (
     <>
       {/* Hero Section */}
-      <Box as="section" mb={12}>
-        <Text
-          as="h1"
-          textStyle="hero"
-          fontSize={{ base: "4xl", md: "5xl" }}
-          color="fg"
-          mb={8}
-          maxW="2xl"
-        >
-          {t("site.description")}
-        </Text>
-        <YearSelector
-          years={metaData.years}
-          selected={selectedYear}
-          onChange={setSelectedYear}
-          label={t("year.select")}
-        />
+      <Box as="section">
+        <Stack align="start" gap={{ base: 5, md: 12 }} mb={8} maxW="2xl">
+          <SiteLogo siteTitle={t("site.title")} />
+          <Text
+            as="h1"
+            textStyle="hero"
+            fontSize={{ base: "4xl", md: "5xl" }}
+            color="fg"
+          >
+            {t("site.description")}
+          </Text>
+        </Stack>
       </Box>
+      <YearSelector
+        years={metaData.years}
+        selected={selectedYear}
+        onChange={setSelectedYear}
+        label={t("year.select")}
+        pb={4}
+        mx={-6}
+        px={6}
+      />
 
       {/* Main Content Grid */}
       <Grid
@@ -98,6 +104,15 @@ function Dashboard() {
               />
             ))}
         </Grid>
+      </Box>
+
+      <Box mt={16}>
+        <TopDonorsCard
+          year={selectedYear}
+          entries={topDonorsByYear[String(selectedYear)] ?? []}
+          lang={lang}
+          t={t}
+        />
       </Box>
     </>
   );

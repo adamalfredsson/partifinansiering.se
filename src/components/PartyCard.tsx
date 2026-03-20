@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { PARTY_CONFIG } from "../data/parties-config";
 import type { Party } from "../data/types";
 import { formatAmount } from "../lib/format";
+import { PartyLogo } from "./PartyLogo";
 
 interface Props {
   party: Party;
@@ -34,19 +35,7 @@ export function PartyCard({ party, year, lang, label }: Props) {
         bg={partyColor}
       />
       <HStack justify="space-between" align="start" mb={6}>
-        <HStack
-          w={10}
-          h={10}
-          bg={partyColor}
-          rounded="lg"
-          align="center"
-          justify="center"
-          color="fg.inverted"
-          textStyle="itemTitle"
-          fontWeight="900"
-        >
-          {config?.abbr ?? "?"}
-        </HStack>
+        <PartyLogo slug={party.slug} size="md" rounded="lg" />
         <Text
           as="span"
           className="material-symbols-outlined"

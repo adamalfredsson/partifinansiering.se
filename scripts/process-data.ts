@@ -1,17 +1,20 @@
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
 import { Schema } from "effect";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import type {
+  Meta,
+  Organization,
   Party,
   PartyYear,
-  Organization,
-  Meta,
   RevenueGroup,
+  TopDonorEntry,
 } from "../src/data/types";
 
 // ── Constants ──────────────────────────────────────────────────────────
 
 const RIKSDAG_PARTY_IDS = new Set([1, 2, 3, 4, 5, 55, 68, 110]);
+
+const LARGE_DONATION_TYPE_CODES = new Set(["5.4", "5.7"]);
 
 const PARTY_DISPLAY_NAMES: Record<number, string> = {
   1: "Moderaterna",
@@ -79,6 +82,7 @@ const CsvRow = Schema.Struct({
   revenueGroupName: Schema.String,
   revenueTypeCode: Schema.String,
   revenueTypeName: Schema.String,
+  revenueTypeDescription: Schema.String,
   amount: SwedishAmount,
 });
 
@@ -118,6 +122,7 @@ export function parseCsvLine(line: string): CsvRow {
     revenueGroupName: c[15] ?? "",
     revenueTypeCode: c[16] ?? "",
     revenueTypeName: c[17] ?? "",
+    revenueTypeDescription: c[18] ?? "",
     amount: c[19] ?? "",
   });
 }
@@ -133,6 +138,49 @@ function getLevel(row: CsvRow): string {
   if (row.isRiksniva) return "riksnivå";
   if (row.isEU) return "eu";
   return "riksnivå";
+}
+
+/** Partiinsyn uses this label when the donor is not named — not useful in a “top donors” list. */
+function isAnonymousDonorLabel(label: string): boolean {
+  return /^privat bidrag\s+(pengar|övrigt)$/i.test(label.trim());
+}
+
+function donorLabelFromRow(r: CsvRow): string {
+  return r.revenueTypeDescription.trim() || r.revenueTypeName;
+}
+
+/** Build top 10 disclosed large donations per year (group 5, types 5.4 / 5.7, riksdag parties). */
+export function buildTopDonorsByYear(
+  riksdagRows: CsvRow[],
+  years: readonly number[],
+): Record<string, TopDonorEntry[]> {
+  const out: Record<string, TopDonorEntry[]> = {};
+  for (const year of years) {
+    const yearRows = riksdagRows.filter(
+      (r) =>
+        r.year === year &&
+        r.revenueGroupCode === 5 &&
+        LARGE_DONATION_TYPE_CODES.has(r.revenueTypeCode) &&
+        r.amount > 0 &&
+        !isAnonymousDonorLabel(donorLabelFromRow(r)),
+    );
+    const top = [...yearRows]
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 10)
+      .map((r) => {
+        const partyName = PARTY_DISPLAY_NAMES[r.partyId] ?? r.partyName;
+        return {
+          amount: r.amount,
+          donorLabel: donorLabelFromRow(r),
+          recipientName: r.name,
+          partyId: r.partyId,
+          partySlug: toSlug(partyName),
+          partyName,
+        };
+      });
+    out[String(year)] = top;
+  }
+  return out;
 }
 
 function aggregateYears(rows: CsvRow[]): PartyYear[] {
@@ -272,6 +320,12 @@ function processData() {
     JSON.stringify(organizations, null, 2),
   );
   writeFileSync(join(outDir, "meta.json"), JSON.stringify(meta, null, 2));
+
+  const topDonorsByYear = buildTopDonorsByYear(riksdagRows, meta.years);
+  writeFileSync(
+    join(outDir, "top-donors.json"),
+    JSON.stringify(topDonorsByYear, null, 2),
+  );
 
   console.log(`\nOutput written to ${outDir}`);
   console.log(`Parties: ${parties.length}`);

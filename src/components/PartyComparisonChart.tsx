@@ -1,4 +1,4 @@
-import * as ChakraCharts from "@chakra-ui/charts";
+import { Chart, useChart } from "@chakra-ui/charts";
 import { Box, HStack, Text, Wrap } from "@chakra-ui/react";
 import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 import { INCOME_COLORS, PARTY_CONFIG } from "../data/parties-config";
@@ -33,7 +33,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
     ),
   }));
 
-  const chart = ChakraCharts.useChart<Record<string, string | number>>({
+  const chart = useChart<Record<string, string | number>>({
     data: chartData,
     series: allKeys.map((key) => ({
       name: key,
@@ -70,7 +70,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
         </Box>
       </HStack>
 
-      <ChakraCharts.Chart.Root chart={chart}>
+      <Chart.Root chart={chart}>
         <BarChart
           data={chart.data}
           layout="vertical"
@@ -82,11 +82,13 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
           <XAxis type="number" hide />
           <Tooltip
             content={({ payload }) => (
-              <ChakraCharts.Chart.Tooltip
+              <Chart.Tooltip
+                payload={payload}
                 label={payload?.[0]?.payload?.name}
+                showTotal
                 formatter={(value, name) => [
                   formatMillions(Number(value)),
-                  t(`revenue.${name}`),
+                  t(`revenue.${String(name)}`),
                 ]}
               />
             )}
@@ -148,7 +150,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
             />
           ))}
         </BarChart>
-      </ChakraCharts.Chart.Root>
+      </Chart.Root>
 
       {/* Legend */}
       <Wrap
@@ -157,7 +159,7 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
         gapY={3}
         pt={8}
         borderTop="1px solid"
-        borderColor="border.subtle"
+        borderColor="bg.muted"
       >
         {allKeys.map((key) => (
           <HStack key={key} align="center" gap={2}>

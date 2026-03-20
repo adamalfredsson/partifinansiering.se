@@ -5,10 +5,12 @@ import {
   defineLayerStyles,
   defineTextStyles,
 } from "@chakra-ui/react";
+import { tableSlotRecipe, tableTextStyles } from "./components/table";
 
 // ── Text Styles ────────────────────────────────────────────────────────
 
 const textStyles = defineTextStyles({
+  ...tableTextStyles,
   // Page hero heading
   hero: {
     description: "Large page title (hero section)",
@@ -304,6 +306,9 @@ const config = defineConfig({
     textStyles,
     layerStyles,
     semanticTokens,
+    slotRecipes: {
+      table: tableSlotRecipe,
+    },
   },
   globalCss: {
     body: {

@@ -24,11 +24,11 @@ CSV:n innehåller många organisationer. För att undvika fel bolag krävs en **
 
 ## Artefakter (JSON i repo)
 
-| Fil                                                                    | Innehåll                                                                                                   |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Fil                                                                    | Innehåll                                                                                                     |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `annual-reports.discovery.json` (namn kan preciseras i implementation) | Per parti/orgnr/år: källor, URL:er, lokal sökväg till PDF om nedladdad, tidsstämplar/rå metadata från crawl. |
-| `annual-reports.extracted.proposed.json`                               | LLM:ens tolkning enligt fast schema (för parsebarhet och diff). **Committad** (spårbarhet).                |
-| `annual-reports.extracted.validated.json`                              | Redaktionellt godkänd data som **sajten läser** för diagram/tabeller.                                      |
+| `annual-reports.extracted.proposed.json`                               | LLM:ens tolkning enligt fast schema (för parsebarhet och diff). **Committad** (spårbarhet).                  |
+| `annual-reports.extracted.validated.json`                              | Redaktionellt godkänd data som **sajten läser** för diagram/tabeller.                                        |
 
 Både **proposed** och **validated** committas (val A): PR:er kan visa vad modellen föreslagit jämfört med senaste validerade versionen.
 

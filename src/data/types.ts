@@ -35,3 +35,15 @@ export interface Meta {
   revenueGroups: RevenueGroup[];
   lastUpdated: string;
 }
+
+/** Largest disclosed donations (Partiinsyn 5.4 / 5.7), precomputed per year */
+export interface TopDonorEntry {
+  amount: number;
+  donorLabel: string;
+  recipientName: string;
+  partyId: number;
+  partySlug: string;
+  partyName: string;
+}
+
+export type TopDonorsByYear = Record<string, TopDonorEntry[]>;

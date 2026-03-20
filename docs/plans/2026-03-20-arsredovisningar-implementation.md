@@ -6,7 +6,7 @@
 
 **Architecture:** Curated `partyId → kansli orgnr` config is read by a Node script that **scrapes Bolagsverket’s public website** (not the paid API) using **Crawlee** (Playwright) or **Stagehand** (AI-guided browser), writes discovery JSON, downloads PDFs (Git LFS recommended). Crawl is intentionally **off the default `vite build` path**—run on a schedule or manually, then commit artifacts. A second script extracts text from PDFs, calls an LLM with a strict schema, writes `proposed` JSON; humans merge to `validated` JSON. The app loads only `validated` for metrics and discovery for links/PDF paths.
 
-**Tech Stack:** TypeScript, `tsx`, existing Vitest; **Crawlee + playwright** *or* **@browserbasecom/stagehand** (+ Playwright); PDF text extraction; LLM SDK for extraction (and for Stagehand if used for discovery); optional Zod/Effect Schema for validation. Chakra UI for UI.
+**Tech Stack:** TypeScript, `tsx`, existing Vitest; **Crawlee + playwright** _or_ **@browserbasecom/stagehand** (+ Playwright); PDF text extraction; LLM SDK for extraction (and for Stagehand if used for discovery); optional Zod/Effect Schema for validation. Chakra UI for UI.
 
 ---
 
@@ -68,7 +68,7 @@
 - Create: `scripts/crawl/bolagsverket-annual-reports.ts` (or `scripts/discover-annual-reports-crawler.ts`) — crawler entry
 - Modify: `scripts/discover-annual-reports.ts` — call crawler implementation
 - Create: `.env.example` — if **Stagehand**: `OPENAI_API_KEY=` / `ANTHROPIC_API_KEY=` (per Stagehand docs); if **Crawlee only**: optional throttling env vars only
-- Modify: `package.json` — add deps: `crawlee` + `playwright` *or* `@browserbasecom/stagehand` + peer browser deps; add `postinstall` or README step: `pnpm exec playwright install chromium` (exact package per chosen stack)
+- Modify: `package.json` — add deps: `crawlee` + `playwright` _or_ `@browserbasecom/stagehand` + peer browser deps; add `postinstall` or README step: `pnpm exec playwright install chromium` (exact package per chosen stack)
 
 **Step 1:** **Pick stack:** Crawlee for deterministic flows (recommended default); Stagehand if selectors are brittle and you accept LLM cost in discovery.
 

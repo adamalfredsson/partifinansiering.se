@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 import {
-  Outlet,
   createRootRoute,
   HeadContent,
+  Outlet,
   Scripts,
 } from "@tanstack/react-router";
 import { Provider } from "../components/ui/provider";
@@ -28,9 +28,9 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
-function RootComponent() {
+export function RootComponent() {
   return (
-    <html lang="sv">
+    <html lang="sv" className="light" style={{ colorScheme: "light" }}>
       <head>
         <HeadContent />
       </head>

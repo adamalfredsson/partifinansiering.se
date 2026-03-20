@@ -1,10 +1,11 @@
 import { Box, Grid, HStack, Text } from "@chakra-ui/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { OrganizationTable } from "../../../components/OrganizationTable";
+import { PartyLogo } from "../../../components/PartyLogo";
 import { RevenueBreakdown } from "../../../components/RevenueBreakdown";
 import { RevenueTrend } from "../../../components/RevenueTrend";
 import { YearSelector } from "../../../components/YearSelector";
+import { useYear } from "../../../context/YearContext";
 import metaData from "../../../data/generated/meta.json";
 import orgsData from "../../../data/generated/organizations.json";
 import partiesData from "../../../data/generated/parties.json";
@@ -23,9 +24,7 @@ export const Route = createFileRoute("/$lang/parti/$partySlug")({
 function PartyDetail() {
   const { lang, partySlug } = Route.useParams();
   const { t } = getTranslation(lang);
-  const [selectedYear, setSelectedYear] = useState(
-    metaData.years[metaData.years.length - 1],
-  );
+  const { selectedYear, setSelectedYear } = useYear();
 
   const party = parties.find((p) => p.slug === partySlug);
   if (!party) return <Text p={12}>Party not found.</Text>;
@@ -52,6 +51,7 @@ function PartyDetail() {
       ...o,
       yearTotal: o.years.find((y) => y.year === selectedYear)?.total ?? 0,
     }))
+    .filter((o) => o.name.trim().length > 0 && o.yearTotal > 0)
     .sort((a, b) => b.yearTotal - a.yearTotal);
 
   return (
@@ -80,19 +80,7 @@ function PartyDetail() {
 
       {/* Hero */}
       <HStack align="center" gap={5} mb={8}>
-        <HStack
-          w={14}
-          h={14}
-          bg={partyColor}
-          rounded="xl"
-          align="center"
-          justify="center"
-          color="fg.inverted"
-          textStyle="sectionTitle"
-          fontWeight="900"
-        >
-          {config?.abbr ?? "?"}
-        </HStack>
+        <PartyLogo slug={party.slug} size="lg" rounded="xl" />
         <Box>
           <Text
             as="h1"
@@ -112,62 +100,23 @@ function PartyDetail() {
           selected={selectedYear}
           onChange={setSelectedYear}
           label={t("year.select")}
+          pb={4}
+          mx={-6}
+          px={6}
         />
       </Box>
 
-      {/* Stat cards */}
+      {/* Revenue breakdown + stat cards */}
       <Grid
         templateColumns={{
           base: "1fr",
-          sm: "repeat(2, 1fr)",
-          lg: "repeat(4, 1fr)",
+          lg: "minmax(0, 1fr) minmax(280px, 400px)",
         }}
-        gap={4}
+        gap={{ base: 6, lg: 6 }}
+        alignItems="start"
         mb={10}
       >
-        <Box layerStyle="heroCard" p={6}>
-          <Text textStyle="microLabel" color="fg.inverted" opacity={0.7} mb={2}>
-            {t("party.totalRevenue")}
-          </Text>
-          <Text textStyle="cardStat" color="fg.inverted">
-            {formatMillions(total)}
-          </Text>
-        </Box>
-        <Box layerStyle="surfaceCard" p={6}>
-          <Text textStyle="microLabel" color="bg.emphasis" opacity={0.7} mb={2}>
-            {t("party.yearOverYear")}
-          </Text>
-          <Text textStyle="cardStat" color="bg.emphasis">
-            {changePercent !== null
-              ? `${changePercent >= 0 ? "+" : ""}${changePercent.toFixed(1).replace(".", ",")}%`
-              : "—"}
-          </Text>
-        </Box>
-        <Box layerStyle="surfaceCard" p={6}>
-          <Text textStyle="microLabel" color="bg.emphasis" opacity={0.7} mb={2}>
-            {t("party.orgCount")}
-          </Text>
-          <Text textStyle="cardStat" color="bg.emphasis">
-            {partyOrgs.length}
-          </Text>
-        </Box>
-        <Box layerStyle="surfaceCard" p={6}>
-          <Text textStyle="microLabel" color="bg.emphasis" opacity={0.7} mb={2}>
-            {t("party.topSource")}
-          </Text>
-          <Text textStyle="itemTitle" color="bg.emphasis">
-            {topSource ? t(`revenue.${topSource[0]}`) : "—"}
-          </Text>
-        </Box>
-      </Grid>
-
-      {/* Charts row */}
-      <Grid
-        templateColumns={{ base: "1fr", lg: "repeat(12, 1fr)" }}
-        gap={6}
-        mb={10}
-      >
-        <Box gridColumn={{ lg: "span 5" }}>
+        <Box minW={0}>
           <RevenueBreakdown
             entries={revenueEntries}
             total={total}
@@ -175,18 +124,77 @@ function PartyDetail() {
             partyColor={partyColor}
           />
         </Box>
-        <Box gridColumn={{ lg: "span 7" }}>
-          <RevenueTrend
-            party={party}
-            years={metaData.years}
-            t={t}
-            partyColor={partyColor}
-          />
-        </Box>
+        <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">
+          <Box layerStyle="heroCard" p={6}>
+            <Text
+              textStyle="microLabel"
+              color="fg.inverted"
+              opacity={0.7}
+              mb={2}
+            >
+              {t("party.totalRevenue")}
+            </Text>
+            <Text textStyle="cardStat" color="fg.inverted">
+              {formatMillions(total)}
+            </Text>
+          </Box>
+          <Box layerStyle="surfaceCard" p={6}>
+            <Text
+              textStyle="microLabel"
+              color="bg.emphasis"
+              opacity={0.7}
+              mb={2}
+            >
+              {t("party.yearOverYear")}
+            </Text>
+            <Text textStyle="cardStat" color="bg.emphasis">
+              {changePercent !== null
+                ? `${changePercent >= 0 ? "+" : ""}${changePercent.toFixed(1).replace(".", ",")}%`
+                : "—"}
+            </Text>
+          </Box>
+          <Box layerStyle="surfaceCard" p={6}>
+            <Text
+              textStyle="microLabel"
+              color="bg.emphasis"
+              opacity={0.7}
+              mb={2}
+            >
+              {t("party.orgCount")}
+            </Text>
+            <Text textStyle="cardStat" color="bg.emphasis">
+              {partyOrgs.length}
+            </Text>
+          </Box>
+          <Box layerStyle="surfaceCard" p={6}>
+            <Text
+              textStyle="microLabel"
+              color="bg.emphasis"
+              opacity={0.7}
+              mb={2}
+            >
+              {t("party.topSource")}
+            </Text>
+            <Text textStyle="itemTitle" color="bg.emphasis">
+              {topSource ? t(`revenue.${topSource[0]}`) : "—"}
+            </Text>
+          </Box>
+        </Grid>
       </Grid>
 
       {/* Organizations table */}
       <OrganizationTable orgs={partyOrgs} year={selectedYear} t={t} />
+
+      {/* Revenue over time — full width */}
+      <Box mt={10}>
+        <RevenueTrend
+          party={party}
+          years={metaData.years}
+          selectedYear={selectedYear}
+          t={t}
+          partyColor={partyColor}
+        />
+      </Box>
     </>
   );
 }

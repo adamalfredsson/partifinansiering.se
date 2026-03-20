@@ -1,5 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { parseCsvLine, parseAmount, toSlug } from "./process-data";
+import { describe, expect, it } from "vitest";
+import {
+  buildTopDonorsByYear,
+  parseAmount,
+  parseCsvLine,
+  toSlug,
+} from "./process-data";
 
 describe("parseAmount", () => {
   it("parses Swedish decimal format", () => {
@@ -39,6 +44,7 @@ describe("parseCsvLine", () => {
     expect(row.isKommunal).toBe(false);
     expect(row.revenueGroupCode).toBe(1);
     expect(row.revenueTypeCode).toBe("1.1");
+    expect(row.revenueTypeDescription).toBe("");
     expect(row.amount).toBe(0);
   });
 
@@ -48,6 +54,53 @@ describe("parseCsvLine", () => {
     const row = parseCsvLine(line);
     expect(row.year).toBe(2023);
     expect(row.partyId).toBe(2);
+    expect(row.revenueTypeDescription).toBe("");
     expect(row.amount).toBe(168800000);
+  });
+
+  it("parses Intäktstyp beskrivning (column 18)", () => {
+    const line =
+      "2024\t864500-9831\tLiberalerna Borås\t3\tLiberalerna\tJa\t1490\tBorås\t\t\t\t\t\t\t5\tBidrag\t5.7\tÖvriga bidrag över 28 650 kronor\tFreja 8 (764500-1988) Pengar\t125000,00";
+    const row = parseCsvLine(line);
+    expect(row.revenueTypeCode).toBe("5.7");
+    expect(row.revenueTypeDescription).toBe("Freja 8 (764500-1988) Pengar");
+    expect(row.amount).toBe(125000);
+  });
+});
+
+describe("buildTopDonorsByYear", () => {
+  it("keeps top 10 by amount for riksdag group-5 large donation rows", () => {
+    const base =
+      "2024\t802000-0000\tTestorg\t2\tArbetarepartiet-Socialdemokraterna\t\t\t\t\t\t\tJa\t\tJa\t";
+    const rows = Array.from({ length: 12 }, (_, i) =>
+      parseCsvLine(
+        `${base}5\tBidrag\t5.4\tPrivat över tröskel\tBidrag ${i}\t${(12 - i) * 1000},00`,
+      ),
+    );
+    const byYear = buildTopDonorsByYear(rows, [2024]);
+    expect(byYear["2024"]).toHaveLength(10);
+    expect(byYear["2024"][0].amount).toBe(12000);
+    expect(byYear["2024"][9].amount).toBe(3000);
+  });
+
+  it("returns empty arrays for years with no qualifying rows", () => {
+    const byYear = buildTopDonorsByYear([], [2020, 2021]);
+    expect(byYear["2020"]).toEqual([]);
+    expect(byYear["2021"]).toEqual([]);
+  });
+
+  it("excludes anonymous Privat bidrag rows from the ranking", () => {
+    const base =
+      "2024\t802000-0000\tTestorg\t2\tArbetarepartiet-Socialdemokraterna\t\t\t\t\t\t\tJa\t\tJa\t";
+    const anonymous = parseCsvLine(
+      `${base}5\tBidrag\t5.4\tPrivat över tröskel\tPrivat bidrag Pengar\t999999,00`,
+    );
+    const named = parseCsvLine(
+      `${base}5\tBidrag\t5.4\tPrivat över tröskel\tAcme AB (556000-0000) Pengar\t1000,00`,
+    );
+    const byYear = buildTopDonorsByYear([anonymous, named], [2024]);
+    expect(byYear["2024"]).toHaveLength(1);
+    expect(byYear["2024"][0].donorLabel).toBe("Acme AB (556000-0000) Pengar");
+    expect(byYear["2024"][0].amount).toBe(1000);
   });
 });
