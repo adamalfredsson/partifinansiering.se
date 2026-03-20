@@ -50,7 +50,15 @@ export function SiteLogo({
       color={color}
       {...props}
     >
-      <Box as="span" display="inline-block" aria-hidden>
+      <Box
+        as="span"
+        display="flex"
+        flexShrink={0}
+        alignItems="center"
+        justifyContent="center"
+        lineHeight={0}
+        aria-hidden
+      >
         <svg
           width={px}
           height={px}
@@ -98,6 +106,7 @@ export function SiteLogo({
         as="span"
         textStyle="logo"
         fontSize={titleFontSize[size]}
+        lineHeight="1"
         color={color}
       >
         {siteTitle}

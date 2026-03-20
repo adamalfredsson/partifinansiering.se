@@ -1,8 +1,15 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { DashboardPage } from "../components/DashboardPage";
+import { Layout } from "../components/Layout";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => {
-    throw redirect({ to: "/$lang", params: { lang: "sv" } });
-  },
-  component: () => null,
+  component: SvHome,
 });
+
+function SvHome() {
+  return (
+    <Layout lang="sv">
+      <DashboardPage lang="sv" />
+    </Layout>
+  );
+}

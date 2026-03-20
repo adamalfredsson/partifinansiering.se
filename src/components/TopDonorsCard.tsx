@@ -7,7 +7,7 @@ import { PartyLogo } from "./PartyLogo";
 interface Props {
   year: number;
   entries: TopDonorEntry[];
-  lang: string;
+  lang: "sv" | "en";
   t: (key: string) => string;
 }
 
@@ -40,42 +40,44 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
         >
           <Table.Root
             aria-labelledby={headingId}
+            native
             variant="dataCard"
             size="md"
             w="full"
             tableLayout="fixed"
           >
-            <Table.ColumnGroup>
-              <Table.Column minW={0} />
-              <Table.Column width="3.5rem" />
-              <Table.Column width="min(9rem, 32vw)" minW={0} />
-            </Table.ColumnGroup>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>
-                  {t("topDonors.columnDonor")}
-                </Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  {t("topDonors.columnParty")}
-                </Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  {t("topDonors.columnAmount")}
-                </Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
+            <colgroup>
+              <col style={{ minWidth: 0 }} />
+              <col style={{ width: "3.5rem" }} />
+              <col style={{ width: "min(9rem, 32vw)", minWidth: 0 }} />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">{t("topDonors.columnDonor")}</th>
+                <th scope="col">{t("topDonors.columnParty")}</th>
+                <th scope="col">{t("topDonors.columnAmount")}</th>
+              </tr>
+            </thead>
+            <tbody>
               {entries.map((row, i) => (
-                <Table.Row
+                <tr
                   key={`${row.partyId}-${row.recipientName}-${row.amount}-${i}`}
                 >
-                  <Table.Cell>
+                  <td>
                     <Text textStyle="tableCellPrimary">{row.donorLabel}</Text>
-                  </Table.Cell>
-                  <Table.Cell>
+                  </td>
+                  <td>
                     <Center w="full">
                       <Link
-                        to="/$lang/parti/$partySlug"
-                        params={{ lang, partySlug: row.partySlug }}
+                        {...(lang === "en"
+                          ? {
+                              to: "/en/parti/$partySlug",
+                              params: { partySlug: row.partySlug },
+                            }
+                          : {
+                              to: "/parti/$partySlug",
+                              params: { partySlug: row.partySlug },
+                            })}
                         aria-label={row.partyName}
                         style={{
                           display: "inline-flex",
@@ -90,15 +92,15 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
                         />
                       </Link>
                     </Center>
-                  </Table.Cell>
-                  <Table.Cell>
+                  </td>
+                  <td>
                     <Text textStyle="tableCellAmount">
                       {formatAmount(row.amount)} {t("amount.suffix")}
                     </Text>
-                  </Table.Cell>
-                </Table.Row>
+                  </td>
+                </tr>
               ))}
-            </Table.Body>
+            </tbody>
           </Table.Root>
         </Box>
       )}

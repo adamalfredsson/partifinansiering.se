@@ -1,6 +1,6 @@
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Box, HStack, Text, Wrap } from "@chakra-ui/react";
-import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, BarStack, Tooltip, XAxis, YAxis } from "recharts";
 import { INCOME_COLORS, PARTY_CONFIG } from "../data/parties-config";
 import type { Party, PartyYear } from "../data/types";
 import { formatMillions } from "../lib/format";
@@ -140,15 +140,15 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
               );
             }}
           />
-          {allKeys.map((key) => (
-            <Bar
-              key={key}
-              dataKey={key}
-              stackId="revenue"
-              fill={INCOME_COLORS[key] ?? "#73777f"}
-              radius={0}
-            />
-          ))}
+          <BarStack stackId="revenue" radius={6}>
+            {allKeys.map((key) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                fill={INCOME_COLORS[key] ?? "#73777f"}
+              />
+            ))}
+          </BarStack>
         </BarChart>
       </Chart.Root>
 

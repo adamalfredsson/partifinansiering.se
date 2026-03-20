@@ -312,9 +312,46 @@ function processData() {
 
   // Write output
   const outDir = join(import.meta.dirname, "..", "src", "data", "generated");
+  const publicDir = join(import.meta.dirname, "..", "public");
   mkdirSync(outDir, { recursive: true });
+  mkdirSync(publicDir, { recursive: true });
 
   writeFileSync(join(outDir, "parties.json"), JSON.stringify(parties, null, 2));
+
+  const siteOrigin = (
+    process.env.SITE_ORIGIN ?? "https://partifinansiering.se"
+  ).replace(/\/$/, "");
+  const sitemapUrls = [
+    `${siteOrigin}/`,
+    `${siteOrigin}/en`,
+    ...parties.flatMap((p) => [
+      `${siteOrigin}/parti/${p.slug}`,
+      `${siteOrigin}/en/parti/${p.slug}`,
+    ]),
+  ];
+  const lastmod = meta.lastUpdated;
+  const sitemapBody = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...sitemapUrls.map((loc) => {
+      const norm = loc.replace(/\/$/, "");
+      const priority =
+        norm === siteOrigin || norm === `${siteOrigin}/en` ? "1.0" : "0.8";
+      return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>${priority}</priority></url>`;
+    }),
+    "</urlset>",
+    "",
+  ].join("\n");
+  writeFileSync(join(publicDir, "sitemap.xml"), sitemapBody);
+
+  const robotsBody = [
+    "User-agent: *",
+    "Allow: /",
+    "",
+    `Sitemap: ${siteOrigin}/sitemap.xml`,
+    "",
+  ].join("\n");
+  writeFileSync(join(publicDir, "robots.txt"), robotsBody);
   writeFileSync(
     join(outDir, "organizations.json"),
     JSON.stringify(organizations, null, 2),

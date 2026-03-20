@@ -1,13 +1,14 @@
 import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
-import { RootComponent } from "./__root";
+import { RootDocument } from "./__root";
 
-describe("RootComponent", () => {
+describe("RootDocument", () => {
   it("renders the forced light theme attributes on html", () => {
-    const element = RootComponent();
+    const element = RootDocument({ lang: "sv", children: null });
 
     expect(
       isValidElement<{
+        lang?: string;
         className?: string;
         style?: { colorScheme?: string };
       }>(element),
@@ -15,13 +16,15 @@ describe("RootComponent", () => {
 
     if (
       !isValidElement<{
+        lang?: string;
         className?: string;
         style?: { colorScheme?: string };
       }>(element)
     ) {
-      throw new Error("RootComponent must return a valid React element");
+      throw new Error("RootDocument must return a valid React element");
     }
 
+    expect(element.props.lang).toBe("sv");
     expect(element.props.className).toBe("light");
     expect(element.props.style).toEqual({ colorScheme: "light" });
   });

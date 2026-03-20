@@ -1,6 +1,8 @@
 {
   "site.title": "partifinansiering.se",
   "site.description": "Så finansieras Sveriges partier",
+  "seo.homeMetaDescription": "Utforska hur riksdagspartier finansieras: intäktskällor, större bidrag och lokala organisationer utifrån Kammarkollegiets Partiinsyn.",
+  "seo.partyMetaDescription": "Intäkter, intäktsfördelning, lokala organisationer och trender för {party} — baserat på officiell Partiinsyn-data.",
   "nav.overview": "Översikt",
   "nav.parties": "Partier",
   "nav.about": "Om",
@@ -23,6 +25,9 @@
   "sidebar.topSources": "Topp 3 inkomstkällor",
   "partyOverview.title": "Partiöversikt",
   "footer.source": "Data från Kammarkollegiets Partiinsyn",
+  "footer.tagline": "En oberoende granskning av hur de politiska partierna finansieras. Baserat på officiell data från Kammarkollegiets Partiinsyn.",
+  "footer.builtBy": "Byggt av Zodiapps",
+  "footer.disclaimer": "Webbplatsen tillhandahålls i befintligt skick. Inget ansvar tas för informationens riktighet, fullständighet eller aktualitet. Officiella uppgifter hos Kammarkollegiet gäller.",
   "party.back": "Tillbaka till översikt",
   "party.revenueBreakdown": "Intäktsfördelning",
   "party.revenueOverTime": "Intäkter över tid",

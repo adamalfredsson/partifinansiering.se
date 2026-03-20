@@ -1,45 +1,36 @@
-import { Box, ClientOnly, Grid, Stack, Text } from "@chakra-ui/react";
-import { createFileRoute } from "@tanstack/react-router";
-import { PartyCard } from "../../components/PartyCard";
-import { PartyComparisonChart } from "../../components/PartyComparisonChart";
-import { SidebarStats } from "../../components/SidebarStats";
-import { SiteLogo } from "../../components/SiteLogo";
-import { TopDonorsCard } from "../../components/TopDonorsCard";
-import { YearSelector } from "../../components/YearSelector";
-import { useYear } from "../../context/YearContext";
-import metaData from "../../data/generated/meta.json";
-import partiesData from "../../data/generated/parties.json";
-import topDonorsData from "../../data/generated/top-donors.json";
-import type { Party, TopDonorsByYear } from "../../data/types";
-import { getTranslation } from "../../i18n/useTranslation";
+import { Box, ClientOnly, Grid, Text } from "@chakra-ui/react";
+import { useYear } from "../context/YearContext";
+import metaData from "../data/generated/meta.json";
+import partiesData from "../data/generated/parties.json";
+import topDonorsData from "../data/generated/top-donors.json";
+import type { Party, TopDonorsByYear } from "../data/types";
+import { getTranslation } from "../i18n/useTranslation";
+import { PartyCard } from "./PartyCard";
+import { PartyComparisonChart } from "./PartyComparisonChart";
+import { SidebarStats } from "./SidebarStats";
+import { TopDonorsCard } from "./TopDonorsCard";
+import { YearSelector } from "./YearSelector";
 
 const parties = partiesData as Party[];
 const topDonorsByYear = topDonorsData as TopDonorsByYear;
 
-export const Route = createFileRoute("/$lang/")({
-  component: Dashboard,
-});
+export type DashboardPageProps = { lang: "sv" | "en" };
 
-function Dashboard() {
-  const { lang } = Route.useParams();
+export function DashboardPage({ lang }: DashboardPageProps) {
   const { t, locale } = getTranslation(lang);
   const { selectedYear, setSelectedYear } = useYear();
 
   return (
     <>
-      {/* Hero Section */}
-      <Box as="section">
-        <Stack align="start" gap={{ base: 5, md: 12 }} mb={8} maxW="2xl">
-          <SiteLogo siteTitle={t("site.title")} />
-          <Text
-            as="h1"
-            textStyle="hero"
-            fontSize={{ base: "4xl", md: "5xl" }}
-            color="fg"
-          >
-            {t("site.description")}
-          </Text>
-        </Stack>
+      <Box as="section" mb={8} maxW="2xl">
+        <Text
+          as="h1"
+          textStyle="hero"
+          fontSize={{ base: "4xl", md: "5xl" }}
+          color="fg"
+        >
+          {t("site.description")}
+        </Text>
       </Box>
       <YearSelector
         years={metaData.years}
@@ -51,7 +42,6 @@ function Dashboard() {
         px={6}
       />
 
-      {/* Main Content Grid */}
       <Grid
         templateColumns={{ base: "1fr", lg: "repeat(12, 1fr)" }}
         gap={10}
@@ -75,7 +65,6 @@ function Dashboard() {
         />
       </Grid>
 
-      {/* Party Grid */}
       <Box as="section" mt={20}>
         <Text as="h2" textStyle="sectionTitle" color="fg" mb={8}>
           {t("partyOverview.title")}

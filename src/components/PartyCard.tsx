@@ -8,7 +8,7 @@ import { PartyLogo } from "./PartyLogo";
 interface Props {
   party: Party;
   year: number;
-  lang: string;
+  lang: "sv" | "en";
   label: string;
 }
 
@@ -22,8 +22,15 @@ export function PartyCard({ party, year, lang, label }: Props) {
     <LinkBox layerStyle="partyCard" p={6} display="block" role="group">
       <LinkOverlay asChild>
         <Link
-          to="/$lang/parti/$partySlug"
-          params={{ lang, partySlug: party.slug }}
+          {...(lang === "en"
+            ? {
+                to: "/en/parti/$partySlug",
+                params: { partySlug: party.slug },
+              }
+            : {
+                to: "/parti/$partySlug",
+                params: { partySlug: party.slug },
+              })}
         />
       </LinkOverlay>
       <Box

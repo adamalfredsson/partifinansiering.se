@@ -3,9 +3,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "clean": "git clean -xdf node_modules dist .output .tanstack .playwright-mcp",
+    "clean": "git clean -xdf node_modules dist .output .tanstack .playwright-mcp .wrangler",
     "dev": "vite dev",
     "build": "tsx scripts/process-data.ts && vite build",
+    "deploy": "pnpm run build && wrangler deploy",
+    "preview": "vite preview",
     "process-data": "tsx scripts/process-data.ts",
     "test": "vitest run",
     "typegen": "chakra typegen src/theme/index.ts",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^3.34.0",
+    "@cloudflare/vite-plugin": "^1.30.0",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -36,6 +39,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "wrangler": "^4.76.0"
   }
 }

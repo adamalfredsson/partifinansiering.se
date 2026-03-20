@@ -1,8 +1,10 @@
-import { Box, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { YearProvider, useYear } from "../context/YearContext";
 import { getTranslation } from "../i18n/useTranslation";
+import { alternateLocalePath, homeRouteTo } from "../lib/locale-paths";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SiteLogo } from "./SiteLogo";
 import { YearSelector } from "./YearSelector";
 
@@ -41,9 +43,11 @@ function LayoutShell({
   children: ReactNode;
   lang: string;
 }) {
-  const otherLang = lang === "sv" ? "en" : "sv";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const otherLangPath = pathname.replace(/^\/(sv|en)(?=\/|$)/, `/${otherLang}`);
+  const svPath = alternateLocalePath(pathname, "sv");
+  const enPath = alternateLocalePath(pathname, "en");
+  const currentLang = lang === "en" ? "en" : "sv";
+  const homeTo = homeRouteTo(currentLang);
 
   const { years, selectedYear, setSelectedYear } = useYear();
   const showHeader = useScrolledPast(80);
@@ -75,11 +79,7 @@ function LayoutShell({
           gap={4}
         >
           <Box flexShrink={0}>
-            <Link
-              to="/$lang"
-              params={{ lang }}
-              style={{ textDecoration: "none" }}
-            >
+            <Link to={homeTo} style={{ textDecoration: "none" }}>
               <SiteLogo size="sm" siteTitle={t("site.title")} />
             </Link>
           </Box>
@@ -104,6 +104,11 @@ function LayoutShell({
         mx="auto"
         w="full"
       >
+        <Box mb={{ base: 5, md: 12 }} maxW="2xl">
+          <Link to={homeTo} style={{ textDecoration: "none" }}>
+            <SiteLogo siteTitle={t("site.title")} />
+          </Link>
+        </Box>
         {children}
       </Box>
 
@@ -124,12 +129,8 @@ function LayoutShell({
           gap={8}
         >
           <VStack align="start" gap={4}>
-            <Link
-              to="/$lang"
-              params={{ lang }}
-              style={{ textDecoration: "none" }}
-            >
-              <SiteLogo size="md" siteTitle={t("site.title")} align="start" />
+            <Link to={homeTo} style={{ textDecoration: "none" }}>
+              <SiteLogo size="md" siteTitle={t("site.title")} />
             </Link>
             <Text
               fontSize="sm"
@@ -137,49 +138,44 @@ function LayoutShell({
               color="fg.subtle"
               maxW="sm"
             >
-              {lang === "sv"
-                ? "En oberoende granskning av hur de politiska partierna finansieras. Baserat på officiell data från Kammarkollegiets Partiinsyn."
-                : "An independent review of how political parties are financed. Based on official data from Kammarkollegiet's Partiinsyn."}
+              {t("footer.tagline")}
             </Text>
             <Text color="fg.subtle" fontSize="xs" opacity={0.7}>
-              © 2024 partifinansiering.se — Data från Kammarkollegiets
-              Partiinsyn
+              © {new Date().getFullYear()} partifinansiering.se —{" "}
+              {t("footer.source")}
+            </Text>
+            <Text
+              fontSize="xs"
+              lineHeight="relaxed"
+              color="fg.subtle"
+              maxW="md"
+              opacity={0.7}
+            >
+              {t("footer.disclaimer")}
             </Text>
           </VStack>
-          <Grid
-            templateColumns="repeat(2, 1fr)"
-            gapX={12}
-            gapY={4}
-            fontSize="sm"
-          >
-            {[
-              { to: "#", label: lang === "sv" ? "Metodologi" : "Methodology" },
-              { to: "#", label: "API" },
-              { to: "#", label: lang === "sv" ? "Kontakt" : "Contact" },
-              { to: "#", label: "Press" },
-            ].map(({ to, label }) => (
-              <a key={label} href={to}>
-                <Text
-                  color="fg.subtle"
-                  opacity={0.7}
-                  _hover={{ opacity: 1 }}
-                  transition="opacity"
-                >
-                  {label}
-                </Text>
-              </a>
-            ))}
+          <VStack align={{ base: "start", md: "end" }} gap={4} fontSize="sm">
+            <LanguageSwitcher
+              currentLang={currentLang}
+              svPath={svPath}
+              enPath={enPath}
+            />
             <Text
               asChild
               color="fg.subtle"
               opacity={0.7}
               _hover={{ opacity: 1 }}
               transition="opacity"
-              fontWeight="bold"
             >
-              <Link to={otherLangPath}>SV/EN</Link>
+              <a
+                href="https://zodiapps.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("footer.builtBy")}
+              </a>
             </Text>
-          </Grid>
+          </VStack>
         </Stack>
       </Box>
     </VStack>

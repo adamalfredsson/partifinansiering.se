@@ -1,28 +1,29 @@
 import { Box, Grid, HStack, Text } from "@chakra-ui/react";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { OrganizationTable } from "../../../components/OrganizationTable";
-import { PartyLogo } from "../../../components/PartyLogo";
-import { RevenueBreakdown } from "../../../components/RevenueBreakdown";
-import { RevenueTrend } from "../../../components/RevenueTrend";
-import { YearSelector } from "../../../components/YearSelector";
-import { useYear } from "../../../context/YearContext";
-import metaData from "../../../data/generated/meta.json";
-import orgsData from "../../../data/generated/organizations.json";
-import partiesData from "../../../data/generated/parties.json";
-import { PARTY_CONFIG } from "../../../data/parties-config";
-import type { Organization, Party } from "../../../data/types";
-import { getTranslation } from "../../../i18n/useTranslation";
-import { formatMillions } from "../../../lib/format";
+import { Link } from "@tanstack/react-router";
+import { useYear } from "../context/YearContext";
+import metaData from "../data/generated/meta.json";
+import orgsData from "../data/generated/organizations.json";
+import partiesData from "../data/generated/parties.json";
+import { PARTY_CONFIG } from "../data/parties-config";
+import type { Organization, Party } from "../data/types";
+import { getTranslation } from "../i18n/useTranslation";
+import { formatMillions } from "../lib/format";
+import { homeRouteTo } from "../lib/locale-paths";
+import { OrganizationTable } from "./OrganizationTable";
+import { PartyLogo } from "./PartyLogo";
+import { RevenueBreakdown } from "./RevenueBreakdown";
+import { RevenueTrend } from "./RevenueTrend";
+import { YearSelector } from "./YearSelector";
 
 const parties = partiesData as Party[];
 const organizations = orgsData as Organization[];
 
-export const Route = createFileRoute("/$lang/parti/$partySlug")({
-  component: PartyDetail,
-});
+export type PartyDetailPageProps = {
+  lang: "sv" | "en";
+  partySlug: string;
+};
 
-function PartyDetail() {
-  const { lang, partySlug } = Route.useParams();
+export function PartyDetailPage({ lang, partySlug }: PartyDetailPageProps) {
   const { t } = getTranslation(lang);
   const { selectedYear, setSelectedYear } = useYear();
 
@@ -54,9 +55,10 @@ function PartyDetail() {
     .filter((o) => o.name.trim().length > 0 && o.yearTotal > 0)
     .sort((a, b) => b.yearTotal - a.yearTotal);
 
+  const homeTo = homeRouteTo(lang);
+
   return (
     <>
-      {/* Back link */}
       <HStack align="center" gap={2} mb={6}>
         <Text
           as="span"
@@ -72,13 +74,10 @@ function PartyDetail() {
           color="fg.subtle"
           _hover={{ color: "fg" }}
         >
-          <Link to="/$lang" params={{ lang }}>
-            {t("party.back")}
-          </Link>
+          <Link to={homeTo}>{t("party.back")}</Link>
         </Text>
       </HStack>
 
-      {/* Hero */}
       <HStack align="center" gap={5} mb={8}>
         <PartyLogo slug={party.slug} size="lg" rounded="xl" />
         <Box>
@@ -93,7 +92,6 @@ function PartyDetail() {
         </Box>
       </HStack>
 
-      {/* Year selector */}
       <Box mb={10}>
         <YearSelector
           years={metaData.years}
@@ -106,7 +104,6 @@ function PartyDetail() {
         />
       </Box>
 
-      {/* Revenue breakdown + stat cards */}
       <Grid
         templateColumns={{
           base: "1fr",
@@ -182,10 +179,8 @@ function PartyDetail() {
         </Grid>
       </Grid>
 
-      {/* Organizations table */}
       <OrganizationTable orgs={partyOrgs} year={selectedYear} t={t} />
 
-      {/* Revenue over time — full width */}
       <Box mt={10}>
         <RevenueTrend
           party={party}

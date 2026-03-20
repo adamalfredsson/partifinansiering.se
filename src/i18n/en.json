@@ -1,6 +1,8 @@
 {
   "site.title": "partifinansiering.se",
   "site.description": "How Sweden's parties are financed",
+  "seo.homeMetaDescription": "Explore how Sweden’s Riksdag parties are financed: revenue sources, major donations, and local organisations from Kammarkollegiet’s Partiinsyn.",
+  "seo.partyMetaDescription": "Revenue, breakdown, local organisations, and trends for {party} — based on official Partiinsyn data.",
   "nav.overview": "Overview",
   "nav.parties": "Parties",
   "nav.about": "About",
@@ -23,6 +25,9 @@
   "sidebar.topSources": "Top 3 income sources",
   "partyOverview.title": "Party overview",
   "footer.source": "Data from Kammarkollegiet's Partiinsyn",
+  "footer.tagline": "An independent review of how political parties are financed. Based on official data from Kammarkollegiet's Partiinsyn.",
+  "footer.builtBy": "Site by Zodiapps",
+  "footer.disclaimer": "This site is provided as-is and accepts no responsibility for the accuracy, completeness, or timeliness of the information shown. Official figures from Kammarkollegiet prevail.",
   "party.back": "Back to overview",
   "party.revenueBreakdown": "Revenue breakdown",
   "party.revenueOverTime": "Revenue over time",

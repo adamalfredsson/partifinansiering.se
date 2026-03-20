@@ -106,6 +106,7 @@ export function OrganizationTable({ orgs, year, t }: OrganizationTableProps) {
             >
               <Table.Root
                 aria-labelledby={headingId}
+                native
                 variant="dataCardQuad"
                 size="md"
                 tableLayout="auto"
@@ -114,50 +115,40 @@ export function OrganizationTable({ orgs, year, t }: OrganizationTableProps) {
                   minWidth: "100%",
                 }}
               >
-                <Table.ColumnGroup>
-                  <Table.Column minW="min(12rem, 40vw)" />
-                  <Table.Column minW="min(9rem, 36vw)" />
-                  <Table.Column minW="9rem" />
-                  <Table.Column minW="3rem" />
-                </Table.ColumnGroup>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader>
-                      {t("party.orgName")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("party.orgColumnLocation")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("party.orgColumnAmount")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("party.orgColumnTrend")}
-                    </Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
+                <colgroup>
+                  <col style={{ minWidth: "min(12rem, 40vw)" }} />
+                  <col style={{ minWidth: "min(9rem, 36vw)" }} />
+                  <col style={{ minWidth: "9rem" }} />
+                  <col style={{ minWidth: "3rem" }} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th scope="col">{t("party.orgName")}</th>
+                    <th scope="col">{t("party.orgColumnLocation")}</th>
+                    <th scope="col">{t("party.orgColumnAmount")}</th>
+                    <th scope="col">{t("party.orgColumnTrend")}</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {visibleRows.map(({ org, location, trend }) => (
-                    <Table.Row
-                      key={`${org.partyId}-${org.orgNumber || org.name}`}
-                    >
-                      <Table.Cell>
+                    <tr key={`${org.partyId}-${org.orgNumber || org.name}`}>
+                      <td>
                         <Text textStyle="tableCellPrimary">{org.name}</Text>
-                      </Table.Cell>
-                      <Table.Cell>
+                      </td>
+                      <td>
                         <Text textStyle="tableCellSecondary">{location}</Text>
-                      </Table.Cell>
-                      <Table.Cell>
+                      </td>
+                      <td>
                         <Text textStyle="tableCellAmount">
                           {formatAmount(org.yearTotal)} {t("amount.suffix")}
                         </Text>
-                      </Table.Cell>
-                      <Table.Cell>
+                      </td>
+                      <td>
                         <TrendIcon trend={trend} t={t} />
-                      </Table.Cell>
-                    </Table.Row>
+                      </td>
+                    </tr>
                   ))}
-                </Table.Body>
+                </tbody>
               </Table.Root>
             </Box>
             {hasMore ? (
