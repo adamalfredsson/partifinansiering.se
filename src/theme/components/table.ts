@@ -26,7 +26,7 @@ export const tableSlotRecipe = defineSlotRecipe({
         ...dataCardChrome,
         columnHeader: {
           textStyle: "microLabel",
-          color: "fg.subtle",
+          color: "fg.muted",
           fontWeight: "bold",
           whiteSpace: "nowrap",
           py: 3,
@@ -72,7 +72,7 @@ export const tableSlotRecipe = defineSlotRecipe({
         ...dataCardChrome,
         columnHeader: {
           textStyle: "microLabel",
-          color: "fg.subtle",
+          color: "fg.muted",
           fontWeight: "bold",
           py: 3,
           borderBottomWidth: "1px",

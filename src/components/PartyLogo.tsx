@@ -13,12 +13,15 @@ interface PartyLogoProps {
   slug: string;
   size?: Size;
   rounded?: "lg" | "xl";
+  /** Accessible name when using a party icon image (empty = decorative). */
+  logoAlt?: string;
 }
 
 export function PartyLogo({
   slug,
   size = "md",
   rounded = "lg",
+  logoAlt = "",
 }: PartyLogoProps) {
   const config = PARTY_CONFIG[slug];
   const color = config?.color ?? "#73777f";
@@ -30,7 +33,7 @@ export function PartyLogo({
     return (
       <Image
         src={icon}
-        alt=""
+        alt={logoAlt}
         w={s}
         h={s}
         minW={s}

@@ -38,7 +38,7 @@ export function YearSelector({
       {...rootProps}
     >
       {label ? (
-        <Text textStyle="label" color="fg.subtle" flexShrink={0}>
+        <Text textStyle="label" color="fg.muted" flexShrink={0}>
           {label}
         </Text>
       ) : null}
@@ -55,7 +55,7 @@ export function YearSelector({
                 py={2}
                 fontSize="sm"
                 fontWeight={isActive ? "800" : "bold"}
-                color={isActive ? "bg.emphasis" : "fg.subtle"}
+                color={isActive ? "bg.emphasis" : "fg.muted"}
                 cursor="pointer"
                 transition="all 0.15s"
                 _hover={!isActive ? { color: "bg.emphasis" } : undefined}

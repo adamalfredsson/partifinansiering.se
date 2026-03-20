@@ -29,8 +29,10 @@
     "recharts": "^3.8.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@chakra-ui/cli": "^3.34.0",
     "@cloudflare/vite-plugin": "^1.30.0",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

@@ -23,12 +23,12 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
       <Text fontSize="sm" color="fg.muted" mb={2} lineHeight="tall">
         {t("topDonors.intro")}
       </Text>
-      <Text textStyle="caption" color="fg.subtle" mb={6}>
+      <Text textStyle="caption" color="fg.muted" mb={6}>
         {t("topDonors.note")}
       </Text>
 
       {entries.length === 0 ? (
-        <Text color="fg.subtle">{t("topDonors.empty")}</Text>
+        <Text color="fg.muted">{t("topDonors.empty")}</Text>
       ) : (
         <Box
           borderRadius="xl"

@@ -112,71 +112,62 @@ function LayoutShell({
         {children}
       </Box>
 
-      <Box
-        as="footer"
-        layerStyle="footer"
-        w="full"
-        mt="auto"
-        py={12}
-        px={{ base: 4, md: 6 }}
-      >
-        <Stack
-          maxW="7xl"
-          mx="auto"
-          direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          align="start"
-          gap={8}
-        >
-          <VStack align="start" gap={4}>
-            <Link to={homeTo} style={{ textDecoration: "none" }}>
-              <SiteLogo size="md" siteTitle={t("site.title")} />
-            </Link>
-            <Text
-              fontSize="sm"
-              lineHeight="relaxed"
-              color="fg.subtle"
-              maxW="sm"
-            >
-              {t("footer.tagline")}
-            </Text>
-            <Text color="fg.subtle" fontSize="xs" opacity={0.7}>
-              © {new Date().getFullYear()} partifinansiering.se —{" "}
-              {t("footer.source")}
-            </Text>
-            <Text
-              fontSize="xs"
-              lineHeight="relaxed"
-              color="fg.subtle"
-              maxW="md"
-              opacity={0.7}
-            >
-              {t("footer.disclaimer")}
-            </Text>
-          </VStack>
-          <VStack align={{ base: "start", md: "end" }} gap={4} fontSize="sm">
-            <LanguageSwitcher
-              currentLang={currentLang}
-              svPath={svPath}
-              enPath={enPath}
-            />
-            <Text
-              asChild
-              color="fg.subtle"
-              opacity={0.7}
-              _hover={{ opacity: 1 }}
-              transition="opacity"
-            >
-              <a
-                href="https://zodiapps.com"
-                target="_blank"
-                rel="noopener noreferrer"
+      <Box as="footer" layerStyle="footer" w="full" mt="auto" py={12}>
+        <Box maxW="7xl" mx="auto" w="full" px={{ base: 4, md: 6 }}>
+          <Stack
+            direction={{ base: "column", md: "row" }}
+            justify="space-between"
+            align="start"
+            gap={8}
+          >
+            <VStack align="start" gap={4}>
+              <Link to={homeTo} style={{ textDecoration: "none" }}>
+                <SiteLogo size="md" siteTitle={t("site.title")} />
+              </Link>
+              <Text
+                fontSize="sm"
+                lineHeight="relaxed"
+                color="fg.muted"
+                maxW="sm"
               >
-                {t("footer.builtBy")}
-              </a>
-            </Text>
-          </VStack>
-        </Stack>
+                {t("footer.tagline")}
+              </Text>
+              <Text color="fg.muted" fontSize="xs">
+                © {new Date().getFullYear()} partifinansiering.se —{" "}
+                {t("footer.source")}
+              </Text>
+              <Text
+                fontSize="xs"
+                lineHeight="relaxed"
+                color="fg.muted"
+                maxW="md"
+              >
+                {t("footer.disclaimer")}
+              </Text>
+            </VStack>
+            <VStack align={{ base: "start", md: "end" }} gap={4} fontSize="sm">
+              <LanguageSwitcher
+                currentLang={currentLang}
+                svPath={svPath}
+                enPath={enPath}
+              />
+              <Text
+                asChild
+                color="fg.muted"
+                _hover={{ color: "fg" }}
+                transition="color"
+              >
+                <a
+                  href="https://zodiapps.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t("footer.builtBy")}
+                </a>
+              </Text>
+            </VStack>
+          </Stack>
+        </Box>
       </Box>
     </VStack>
   );

@@ -2,6 +2,7 @@ import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { INCOME_COLORS } from "../data/parties-config";
 import type { Party, RevenueGroup } from "../data/types";
 import { formatMillions } from "../lib/format";
+import { contrastingForegroundHex } from "../lib/relative-luminance";
 
 interface Props {
   parties: Party[];
@@ -90,11 +91,12 @@ export function SidebarStats({ parties, year, t, locale }: Props) {
             const pct = ((amount / yearTotals.total) * 100)
               .toFixed(1)
               .replace(".", ",");
+            const chipBg = INCOME_COLORS[key] ?? "#73777f";
             return (
               <HStack key={key} align="start" gap={4} minW={0}>
                 <HStack
-                  bg={INCOME_COLORS[key] ?? "#73777f"}
-                  color="fg.inverted"
+                  bg={chipBg}
+                  color={contrastingForegroundHex(chipBg)}
                   w={8}
                   h={8}
                   minW={8}
@@ -112,7 +114,7 @@ export function SidebarStats({ parties, year, t, locale }: Props) {
                   <Text textStyle="itemTitle" fontSize="sm">
                     {t(`revenue.${key}`)}
                   </Text>
-                  <Text textStyle="caption" fontSize="xs" color="fg.subtle">
+                  <Text textStyle="caption" fontSize="xs" color="fg.muted">
                     {formatMillions(amount)} ({pct}%)
                   </Text>
                 </Box>

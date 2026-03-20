@@ -57,11 +57,11 @@ export function RevenueTrend({
 
   if (!hasAnyData) {
     return (
-      <Box layerStyle="card" p={{ base: 6, md: 8 }}>
-        <Text textStyle="sectionTitle" color="fg" mb={2}>
+      <Box layerStyle="card" p={{ base: 7, md: 10 }}>
+        <Text textStyle="sectionTitle" color="fg" mb={3}>
           {t("party.revenueOverTime")}
         </Text>
-        <Text color="fg.muted" fontSize="sm" mb={4} maxW="lg">
+        <Text color="fg.muted" fontSize="sm" mb={6} maxW="lg" lineHeight="1.65">
           {t("party.revenueOverTimeDescription")}
         </Text>
         <Text color="fg.subtle">Ingen data</Text>
@@ -70,19 +70,20 @@ export function RevenueTrend({
   }
 
   return (
-    <Box layerStyle="card" p={{ base: 6, md: 8 }}>
-      <Text textStyle="sectionTitle" color="fg" mb={2}>
+    <Box layerStyle="card" p={{ base: 7, md: 10 }}>
+      <Text textStyle="sectionTitle" color="fg" mb={3}>
         {t("party.revenueOverTime")}
       </Text>
-      <Text color="fg.muted" fontSize="sm" mb={4} maxW="lg">
+      <Text color="fg.muted" fontSize="sm" mb={6} maxW="lg" lineHeight="1.65">
         {t("party.revenueOverTimeDescription")}
       </Text>
 
       <Chart.Root
         chart={chart}
         aspectRatio="auto"
-        h={{ base: "200px", md: "240px" }}
+        h={{ base: "228px", md: "288px" }}
         maxW="100%"
+        mt={1}
         css={{
           "& .recharts-cartesian-axis-tick-value": {
             whiteSpace: "nowrap",
@@ -91,7 +92,7 @@ export function RevenueTrend({
       >
         <AreaChart
           data={chart.data}
-          margin={{ top: 8, right: 8, left: 0, bottom: 4 }}
+          margin={{ top: 16, right: 20, left: 4, bottom: 14 }}
           responsive
         >
           <XAxis
@@ -99,20 +100,25 @@ export function RevenueTrend({
             type="number"
             domain={["dataMin", "dataMax"]}
             allowDecimals={false}
+            ticks={chartData.map((d) => d.year)}
+            interval={0}
+            minTickGap={0}
             tickFormatter={(y) => String(y)}
             tick={{ fontSize: 12, style: { whiteSpace: "nowrap" } }}
+            tickMargin={10}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
             tickFormatter={(v) => formatMillions(v)}
-            width={92}
+            width={100}
             axisLine={false}
             tickLine={false}
             tick={{
-              fontSize: 11,
+              fontSize: 12,
               style: { whiteSpace: "nowrap" },
             }}
+            tickMargin={8}
           />
           <Tooltip
             content={({ payload }) => (
@@ -151,10 +157,10 @@ export function RevenueTrend({
       </Chart.Root>
 
       <Wrap
-        mt={6}
-        gapX={6}
-        gapY={2}
-        pt={6}
+        mt={8}
+        gapX={8}
+        gapY={3}
+        pt={8}
         borderTop="1px solid"
         borderColor="bg.muted"
       >

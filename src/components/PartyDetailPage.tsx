@@ -7,8 +7,12 @@ import partiesData from "../data/generated/parties.json";
 import { PARTY_CONFIG } from "../data/parties-config";
 import type { Organization, Party } from "../data/types";
 import { getTranslation } from "../i18n/useTranslation";
-import { formatMillions } from "../lib/format";
+import { formatKrPerVote, formatMillions } from "../lib/format";
 import { homeRouteTo } from "../lib/locale-paths";
+import {
+  RIKSDAG_2022_META,
+  RIKSDAG_2022_VOTES_BY_ABBR,
+} from "../lib/riksdag-val-2022";
 import { OrganizationTable } from "./OrganizationTable";
 import { PartyLogo } from "./PartyLogo";
 import { RevenueBreakdown } from "./RevenueBreakdown";
@@ -44,7 +48,15 @@ export function PartyDetailPage({ lang, partySlug }: PartyDetailPageProps) {
   const revenueEntries = yearData
     ? Object.entries(yearData.revenue).sort(([, a], [, b]) => b - a)
     : [];
-  const topSource = revenueEntries[0];
+
+  const riksdag2022Votes =
+    config?.abbr !== undefined
+      ? (RIKSDAG_2022_VOTES_BY_ABBR[config.abbr] ?? null)
+      : null;
+  const revenuePerVoteKr =
+    riksdag2022Votes !== null && riksdag2022Votes > 0 && total > 0
+      ? total / riksdag2022Votes
+      : null;
 
   const partyOrgs = organizations
     .filter((o) => o.partyId === party.id)
@@ -150,32 +162,26 @@ export function PartyDetailPage({ lang, partySlug }: PartyDetailPageProps) {
                 : "—"}
             </Text>
           </Box>
-          <Box layerStyle="surfaceCard" p={6}>
-            <Text
-              textStyle="microLabel"
-              color="bg.emphasis"
-              opacity={0.7}
-              mb={2}
-            >
-              {t("party.orgCount")}
-            </Text>
-            <Text textStyle="cardStat" color="bg.emphasis">
-              {partyOrgs.length}
-            </Text>
-          </Box>
-          <Box layerStyle="surfaceCard" p={6}>
-            <Text
-              textStyle="microLabel"
-              color="bg.emphasis"
-              opacity={0.7}
-              mb={2}
-            >
-              {t("party.topSource")}
-            </Text>
-            <Text textStyle="itemTitle" color="bg.emphasis">
-              {topSource ? t(`revenue.${topSource[0]}`) : "—"}
-            </Text>
-          </Box>
+          {revenuePerVoteKr !== null && (
+            <Box gridColumn="1 / -1" layerStyle="surfaceCard" p={6}>
+              <Text
+                textStyle="microLabel"
+                color="bg.emphasis"
+                opacity={0.7}
+                mb={2}
+              >
+                {t("party.revenuePerVote")}
+              </Text>
+              <Text textStyle="cardStat" color="bg.emphasis" mb={2}>
+                {formatKrPerVote(revenuePerVoteKr)}
+              </Text>
+              <Text textStyle="caption" color="fg.subtle">
+                {t("party.revenuePerVoteHint")
+                  .replace("{year}", String(selectedYear))
+                  .replace("{source}", RIKSDAG_2022_META.source)}
+              </Text>
+            </Box>
+          )}
         </Grid>
       </Grid>
 

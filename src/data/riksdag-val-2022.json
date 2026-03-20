@@ -1,0 +1,71 @@
+{
+  "val": "Riksdagsval 2022",
+  "datum": "2022-09-11",
+  "källa": "Valmyndigheten (slutligt resultat)",
+  "giltiga_röster_totalt": 6477794,
+  "partier": [
+    {
+      "parti": "Socialdemokraterna",
+      "förkortning": "S",
+      "röster": 1964474,
+      "andel_procent": 30.33,
+      "mandat": 107
+    },
+    {
+      "parti": "Sverigedemokraterna",
+      "förkortning": "SD",
+      "röster": 1330325,
+      "andel_procent": 20.54,
+      "mandat": 73
+    },
+    {
+      "parti": "Moderaterna",
+      "förkortning": "M",
+      "röster": 1237428,
+      "andel_procent": 19.1,
+      "mandat": 68
+    },
+    {
+      "parti": "Vänsterpartiet",
+      "förkortning": "V",
+      "röster": 437050,
+      "andel_procent": 6.75,
+      "mandat": 24
+    },
+    {
+      "parti": "Centerpartiet",
+      "förkortning": "C",
+      "röster": 434945,
+      "andel_procent": 6.71,
+      "mandat": 24
+    },
+    {
+      "parti": "Kristdemokraterna",
+      "förkortning": "KD",
+      "röster": 345712,
+      "andel_procent": 5.34,
+      "mandat": 19
+    },
+    {
+      "parti": "Miljöpartiet",
+      "förkortning": "MP",
+      "röster": 329242,
+      "andel_procent": 5.08,
+      "mandat": 18
+    },
+    {
+      "parti": "Liberalerna",
+      "förkortning": "L",
+      "röster": 298542,
+      "andel_procent": 4.61,
+      "mandat": 16
+    },
+    {
+      "parti": "Övriga partier",
+      "förkortning": "ÖVR",
+      "röster": 100076,
+      "andel_procent": 1.54,
+      "mandat": 0
+    }
+  ]
+}
