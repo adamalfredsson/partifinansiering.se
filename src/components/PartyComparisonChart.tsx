@@ -1,5 +1,6 @@
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Box, HStack, Text, Wrap } from "@chakra-ui/react";
+import { useNavigate } from "@tanstack/react-router";
 import { Bar, BarChart, BarStack, Tooltip, XAxis, YAxis } from "recharts";
 import { INCOME_COLORS, PARTY_CONFIG } from "../data/parties-config";
 import type { Party, PartyYear } from "../data/types";
@@ -8,10 +9,28 @@ import { formatMillions } from "../lib/format";
 interface Props {
   parties: Party[];
   year: number;
+  lang: "sv" | "en";
   t: (key: string) => string;
 }
 
-export function PartyComparisonChart({ parties, year, t }: Props) {
+function partySlugFromBarClick(data: {
+  payload?: unknown;
+  slug?: unknown;
+}): string | undefined {
+  const fromPayload =
+    data.payload &&
+    typeof data.payload === "object" &&
+    data.payload !== null &&
+    "slug" in data.payload &&
+    typeof (data.payload as { slug: unknown }).slug === "string"
+      ? (data.payload as { slug: string }).slug
+      : undefined;
+  if (fromPayload) return fromPayload;
+  return typeof data.slug === "string" ? data.slug : undefined;
+}
+
+export function PartyComparisonChart({ parties, year, lang, t }: Props) {
+  const navigate = useNavigate();
   const partyData = parties
     .map((p) => {
       const yearData = p.years.find((y) => y.year === year);
@@ -40,6 +59,18 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
       color: INCOME_COLORS[key] ?? "#73777f",
     })),
   });
+
+  const handleBarClick = (data: unknown) => {
+    const slug = partySlugFromBarClick(
+      data as { payload?: unknown; slug?: unknown },
+    );
+    if (!slug) return;
+    void navigate(
+      lang === "en"
+        ? { to: "/en/parti/$partySlug", params: { partySlug: slug } }
+        : { to: "/parti/$partySlug", params: { partySlug: slug } },
+    );
+  };
 
   if (partyData.length === 0) {
     return (
@@ -146,6 +177,8 @@ export function PartyComparisonChart({ parties, year, t }: Props) {
                 key={key}
                 dataKey={key}
                 fill={INCOME_COLORS[key] ?? "#73777f"}
+                style={{ cursor: "pointer" }}
+                onClick={handleBarClick}
               />
             ))}
           </BarStack>

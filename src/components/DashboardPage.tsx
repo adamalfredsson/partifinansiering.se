@@ -53,7 +53,12 @@ export function DashboardPage({ lang }: DashboardPageProps) {
               <Box layerStyle="card" p={{ base: 8, md: 12 }} minH="400px" />
             }
           >
-            <PartyComparisonChart parties={parties} year={selectedYear} t={t} />
+            <PartyComparisonChart
+              parties={parties}
+              year={selectedYear}
+              lang={lang}
+              t={t}
+            />
           </ClientOnly>
         </Box>
         <SidebarStats
