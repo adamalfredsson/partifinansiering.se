@@ -19,17 +19,7 @@ export const Route = createRootRoute({
         content: "#f6f7f9",
       },
     ],
-    links: [
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap",
-      },
-    ],
+    links: [{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
   }),
   component: RootComponent,
 });

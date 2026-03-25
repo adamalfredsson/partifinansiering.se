@@ -137,6 +137,8 @@ export function PartyComparisonChart({ parties, year, lang, t }: Props) {
               const color = config?.color ?? "#73777f";
               const abbr = config?.abbr ?? "?";
               const icon = config?.icon;
+              const partyLabel =
+                chartData.find((d) => d.slug === slug)?.name ?? slug;
               return (
                 <g transform={`translate(${x},${y})`}>
                   <foreignObject x={-40} y={-20} width={40} height={40}>
@@ -151,6 +153,7 @@ export function PartyComparisonChart({ parties, year, lang, t }: Props) {
                       {icon ? (
                         <Image
                           src={icon}
+                          alt={partyLabel}
                           w={{ base: 6, sm: 8 }}
                           h={{ base: 6, sm: 8 }}
                           style={{ objectFit: "contain" }}

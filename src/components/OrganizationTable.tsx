@@ -1,5 +1,6 @@
 import { Box, Stack, Table, Text } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
+import { LuArrowDownRight, LuArrowUpRight } from "react-icons/lu";
 import type { Organization } from "../data/types";
 import { formatAmount } from "../lib/format";
 
@@ -196,17 +197,16 @@ function TrendIcon({ trend, t }: { trend: Trend; t: (key: string) => string }) {
       </Text>
     );
   }
-  const icon = trend === "up" ? "north_east" : "south_east";
+  const Icon = trend === "up" ? LuArrowUpRight : LuArrowDownRight;
   return (
-    <Text
-      as="span"
-      className="material-symbols-outlined"
-      color={trend === "up" ? "green.600" : "income.5"}
-      fontSize="xl"
-      lineHeight={1}
+    <Box
+      as={Icon}
+      role="img"
       aria-label={trend === "up" ? t("party.trend.up") : t("party.trend.down")}
-    >
-      {icon}
-    </Text>
+      color={trend === "up" ? "green.600" : "income.5"}
+      boxSize={6}
+      lineHeight={1}
+      flexShrink={0}
+    />
   );
 }

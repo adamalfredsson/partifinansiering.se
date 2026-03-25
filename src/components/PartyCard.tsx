@@ -1,5 +1,6 @@
 import { Box, HStack, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
+import { LuArrowRight } from "react-icons/lu";
 import { PARTY_CONFIG } from "../data/parties-config";
 import type { Party } from "../data/types";
 import { getTranslation } from "../i18n/useTranslation";
@@ -55,16 +56,15 @@ export function PartyCard({ party, year, lang, label }: Props) {
       />
       <HStack justify="space-between" align="start" mb={6}>
         <PartyLogo slug={party.slug} size="md" rounded="lg" />
-        <Text
-          as="span"
-          className="material-symbols-outlined"
-          color="fg.subtle"
+        <Box
+          as={LuArrowRight}
           aria-hidden
+          color="fg.subtle"
+          boxSize={5}
+          flexShrink={0}
           _groupHover={{ color: partyColor }}
           transition="color 0.15s"
-        >
-          arrow_forward
-        </Text>
+        />
       </HStack>
       <Text textStyle="microLabel" color="fg.muted" mb={1}>
         {label}

@@ -1,5 +1,6 @@
 import { Box, Grid, HStack, Text } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
+import { LuArrowLeft } from "react-icons/lu";
 import { useYear } from "../context/YearContext";
 import metaData from "../data/generated/meta.json";
 import orgsData from "../data/generated/organizations.json";
@@ -72,14 +73,13 @@ export function PartyDetailPage({ lang, partySlug }: PartyDetailPageProps) {
   return (
     <>
       <HStack align="center" gap={2} mb={6}>
-        <Text
-          as="span"
-          className="material-symbols-outlined"
+        <Box
+          as={LuArrowLeft}
+          aria-hidden
           color="fg.subtle"
-          fontSize="sm"
-        >
-          arrow_back
-        </Text>
+          boxSize={4}
+          flexShrink={0}
+        />
         <Text
           asChild
           textStyle="caption"

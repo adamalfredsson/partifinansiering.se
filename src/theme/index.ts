@@ -299,8 +299,8 @@ const config = defineConfig({
         },
       },
       fonts: {
-        heading: { value: "'Manrope', sans-serif" },
-        body: { value: "'Inter', sans-serif" },
+        heading: { value: "'Manrope Variable', Manrope, sans-serif" },
+        body: { value: "'Inter Variable', Inter, sans-serif" },
       },
     },
     textStyles,
@@ -315,9 +315,6 @@ const config = defineConfig({
       bg: "bg",
       color: "fg",
       fontFamily: "body",
-    },
-    ".material-symbols-outlined": {
-      fontVariationSettings: '"FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24',
     },
   },
 });
