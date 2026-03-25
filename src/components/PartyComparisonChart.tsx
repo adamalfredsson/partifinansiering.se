@@ -1,5 +1,5 @@
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Box, HStack, Text, Wrap } from "@chakra-ui/react";
+import { Box, HStack, Image, Text, Wrap } from "@chakra-ui/react";
 import { useNavigate } from "@tanstack/react-router";
 import { Bar, BarChart, BarStack, Tooltip, XAxis, YAxis } from "recharts";
 import { INCOME_COLORS, PARTY_CONFIG } from "../data/parties-config";
@@ -130,43 +130,49 @@ export function PartyComparisonChart({ parties, year, lang, t }: Props) {
             width={40}
             axisLine={false}
             tickLine={false}
+            interval={0}
             tick={({ x, y, payload }) => {
               const slug = payload?.value as string;
               const config = PARTY_CONFIG[slug];
               const color = config?.color ?? "#73777f";
               const abbr = config?.abbr ?? "?";
               const icon = config?.icon;
-              const size = 32;
               return (
                 <g transform={`translate(${x},${y})`}>
-                  {icon ? (
-                    <image
-                      href={icon}
-                      x={-size}
-                      y={-size / 2}
-                      width={size}
-                      height={size}
-                      preserveAspectRatio="xMidYMid meet"
-                    />
-                  ) : (
-                    <foreignObject x={-40} y={-12} width={40} height={24}>
-                      <Box
-                        as="span"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        w={10}
-                        h={6}
-                        bg={color}
-                        rounded="md"
-                        color="white"
-                        fontSize="xs"
-                        fontWeight="900"
-                      >
-                        {abbr}
-                      </Box>
-                    </foreignObject>
-                  )}
+                  <foreignObject x={-40} y={-20} width={40} height={40}>
+                    <Box
+                      w="full"
+                      h="full"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-end"
+                      pr={1}
+                    >
+                      {icon ? (
+                        <Image
+                          src={icon}
+                          w={{ base: 6, sm: 8 }}
+                          h={{ base: 6, sm: 8 }}
+                          style={{ objectFit: "contain" }}
+                        />
+                      ) : (
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          w={{ base: 8, sm: 10 }}
+                          h={{ base: 5, sm: 6 }}
+                          bg={color}
+                          rounded="md"
+                          color="white"
+                          fontSize={{ base: "2xs", sm: "xs" }}
+                          fontWeight="900"
+                        >
+                          {abbr}
+                        </Box>
+                      )}
+                    </Box>
+                  </foreignObject>
                 </g>
               );
             }}
