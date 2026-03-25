@@ -16,7 +16,13 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
   const headingId = "top-donors-heading";
 
   return (
-    <Box as="section" layerStyle="card" p={{ base: 6, md: 8 }}>
+    <Box
+      as="section"
+      layerStyle="card"
+      p={{ base: 6, md: 8 }}
+      minW={0}
+      maxW="100%"
+    >
       <Text id={headingId} textStyle="sectionTitle" color="fg" mb={3}>
         {title}
       </Text>
@@ -38,70 +44,75 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
           borderColor="bg.muted"
           minW={0}
         >
-          <Table.Root
-            aria-labelledby={headingId}
-            native
-            variant="dataCard"
-            size="md"
-            w="full"
-            tableLayout="fixed"
-          >
-            <colgroup>
-              <col style={{ minWidth: 0 }} />
-              <col style={{ width: "3.5rem" }} />
-              <col style={{ width: "min(9rem, 32vw)", minWidth: 0 }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope="col">{t("topDonors.columnDonor")}</th>
-                <th scope="col">{t("topDonors.columnParty")}</th>
-                <th scope="col">{t("topDonors.columnAmount")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((row, i) => (
-                <tr
-                  key={`${row.partyId}-${row.recipientName}-${row.amount}-${i}`}
-                >
-                  <td>
-                    <Text textStyle="tableCellPrimary">{row.donorLabel}</Text>
-                  </td>
-                  <td>
-                    <Center w="full">
-                      <Link
-                        {...(lang === "en"
-                          ? {
-                              to: "/en/parti/$partySlug",
-                              params: { partySlug: row.partySlug },
-                            }
-                          : {
-                              to: "/parti/$partySlug",
-                              params: { partySlug: row.partySlug },
-                            })}
-                        aria-label={row.partyName}
-                        style={{
-                          display: "inline-flex",
-                          borderRadius: "0.5rem",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <PartyLogo
-                          slug={row.partySlug}
-                          size="sm"
-                          rounded="lg"
-                        />
-                      </Link>
-                    </Center>
-                  </td>
-                  <td>
-                    <Text textStyle="tableCellAmount">
-                      {formatAmount(row.amount)} {t("amount.suffix")}
-                    </Text>
-                  </td>
+          <Box overflowX="auto" minW={0} w="full" overscrollBehaviorX="contain">
+            <Table.Root
+              aria-labelledby={headingId}
+              native
+              variant="dataCard"
+              size="md"
+              tableLayout="auto"
+              css={{
+                width: "max-content",
+                minWidth: "100%",
+              }}
+            >
+              <colgroup>
+                <col style={{ minWidth: "min(12rem, 40vw)" }} />
+                <col style={{ minWidth: "3.5rem", width: "3.5rem" }} />
+                <col style={{ minWidth: "min(9rem, 36vw)" }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">{t("topDonors.columnDonor")}</th>
+                  <th scope="col">{t("topDonors.columnParty")}</th>
+                  <th scope="col">{t("topDonors.columnAmount")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table.Root>
+              </thead>
+              <tbody>
+                {entries.map((row, i) => (
+                  <tr
+                    key={`${row.partyId}-${row.recipientName}-${row.amount}-${i}`}
+                  >
+                    <td>
+                      <Text textStyle="tableCellPrimary">{row.donorLabel}</Text>
+                    </td>
+                    <td>
+                      <Center w="full">
+                        <Link
+                          {...(lang === "en"
+                            ? {
+                                to: "/en/parti/$partySlug",
+                                params: { partySlug: row.partySlug },
+                              }
+                            : {
+                                to: "/parti/$partySlug",
+                                params: { partySlug: row.partySlug },
+                              })}
+                          aria-label={row.partyName}
+                          style={{
+                            display: "inline-flex",
+                            borderRadius: "0.5rem",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <PartyLogo
+                            slug={row.partySlug}
+                            size="sm"
+                            rounded="lg"
+                          />
+                        </Link>
+                      </Center>
+                    </td>
+                    <td>
+                      <Text textStyle="tableCellAmount">
+                        {formatAmount(row.amount)} {t("amount.suffix")}
+                      </Text>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table.Root>
+          </Box>
         </Box>
       )}
     </Box>
