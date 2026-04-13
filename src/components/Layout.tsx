@@ -1,3 +1,4 @@
+import { YearSelector } from "@/components/YearSelector";
 import {
   Box,
   HStack,
@@ -17,7 +18,6 @@ import { alternateLocalePath, homeRouteTo } from "../lib/locale-paths";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { RouterLink } from "./RouterLink";
 import { SiteLogo } from "./SiteLogo";
-import { YearSelector } from "./YearSelector";
 
 interface LayoutProps {
   children: ReactNode;
@@ -192,38 +192,36 @@ function LayoutShell({
                   {t("footer.budgetLink")}
                 </Link>
               </Text>
-              <Text
-                asChild
+              <HStack
+                gap={4}
+                separator={<StackSeparator borderColor="fg.muted" />}
+                align="center"
                 color="fg.muted"
-                _hover={{ color: "fg" }}
                 transition="color"
+                _hover={{ color: "fg" }}
               >
-                <HStack
-                  gap={4}
-                  separator={<StackSeparator borderColor="fg.muted" />}
-                  align="center"
+                <Link
+                  href="https://zodiapps.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="inherit"
                 >
-                  <Link
-                    href="https://zodiapps.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t("footer.builtBy")}
-                  </Link>
-                  <Link
-                    href="https://github.com/adamalfredsson/partifinansiering.se"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Icon
-                      as={SiGithub}
-                      boxSize={5}
-                      flexShrink={0}
-                      aria-label="GitHub"
-                    />
-                  </Link>
-                </HStack>
-              </Text>
+                  {t("footer.builtBy")}
+                </Link>
+                <Link
+                  href="https://github.com/adamalfredsson/partifinansiering.se"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="inherit"
+                >
+                  <Icon
+                    as={SiGithub}
+                    boxSize={5}
+                    flexShrink={0}
+                    aria-label="GitHub"
+                  />
+                </Link>
+              </HStack>
             </VStack>
           </Stack>
         </Box>
