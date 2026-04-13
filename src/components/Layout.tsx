@@ -1,6 +1,16 @@
-import { Box, HStack, Link, Stack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Icon,
+  Link,
+  Stack,
+  StackSeparator,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
+import { SiGithub } from "react-icons/si";
 import { YearProvider, useYear } from "../context/YearContext";
 import { getTranslation } from "../i18n/useTranslation";
 import { alternateLocalePath, homeRouteTo } from "../lib/locale-paths";
@@ -188,13 +198,31 @@ function LayoutShell({
                 _hover={{ color: "fg" }}
                 transition="color"
               >
-                <Link
-                  href="https://zodiapps.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <HStack
+                  gap={4}
+                  separator={<StackSeparator borderColor="fg.muted" />}
+                  align="center"
                 >
-                  {t("footer.builtBy")}
-                </Link>
+                  <Link
+                    href="https://zodiapps.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("footer.builtBy")}
+                  </Link>
+                  <Link
+                    href="https://github.com/adamalfredsson/partifinansiering.se"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon
+                      as={SiGithub}
+                      boxSize={5}
+                      flexShrink={0}
+                      aria-label="GitHub"
+                    />
+                  </Link>
+                </HStack>
               </Text>
             </VStack>
           </Stack>
