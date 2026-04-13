@@ -1,5 +1,4 @@
 import { Box, HStack, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
 import { LuArrowRight } from "react-icons/lu";
 import { PARTY_CONFIG } from "../data/parties-config";
 import type { Party } from "../data/types";
@@ -7,6 +6,7 @@ import { getTranslation } from "../i18n/useTranslation";
 import { formatAmount, formatKrPerVote } from "../lib/format";
 import { RIKSDAG_2022_VOTES_BY_ABBR } from "../lib/riksdag-val-2022";
 import { PartyLogo } from "./PartyLogo";
+import { RouterLink } from "./RouterLink";
 
 interface Props {
   party: Party;
@@ -30,22 +30,19 @@ export function PartyCard({ party, year, lang, label }: Props) {
       ? total / riksdagVotes
       : null;
 
+  const partyLinkProps =
+    lang === "en"
+      ? {
+          to: "/en/parti/$partySlug" as const,
+          params: { partySlug: party.slug },
+        }
+      : {
+          to: "/parti/$partySlug" as const,
+          params: { partySlug: party.slug },
+        };
+
   return (
     <LinkBox layerStyle="partyCard" p={6} display="block" role="group">
-      <LinkOverlay asChild>
-        <Link
-          aria-label={`${party.name} — ${label}`}
-          {...(lang === "en"
-            ? {
-                to: "/en/parti/$partySlug",
-                params: { partySlug: party.slug },
-              }
-            : {
-                to: "/parti/$partySlug",
-                params: { partySlug: party.slug },
-              })}
-        />
-      </LinkOverlay>
       <Box
         position="absolute"
         left={0}
@@ -55,7 +52,14 @@ export function PartyCard({ party, year, lang, label }: Props) {
         bg={partyColor}
       />
       <HStack justify="space-between" align="start" mb={6}>
-        <PartyLogo slug={party.slug} size="md" rounded="lg" />
+        <LinkOverlay asChild>
+          <RouterLink
+            aria-label={`${party.name} — ${label}`}
+            {...partyLinkProps}
+          >
+            <PartyLogo slug={party.slug} size="md" rounded="lg" />
+          </RouterLink>
+        </LinkOverlay>
         <Box
           as={LuArrowRight}
           aria-hidden

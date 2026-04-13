@@ -1,8 +1,8 @@
 import { Box, Center, Table, Text } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
 import type { TopDonorEntry } from "../data/types";
 import { formatAmount } from "../lib/format";
 import { PartyLogo } from "./PartyLogo";
+import { RouterLink } from "./RouterLink";
 
 interface Props {
   year: number;
@@ -78,7 +78,7 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
                     </td>
                     <td>
                       <Center w="full">
-                        <Link
+                        <RouterLink
                           {...(lang === "en"
                             ? {
                                 to: "/en/parti/$partySlug",
@@ -100,7 +100,7 @@ export function TopDonorsCard({ year, entries, lang, t }: Props) {
                             size="sm"
                             rounded="lg"
                           />
-                        </Link>
+                        </RouterLink>
                       </Center>
                     </td>
                     <td>

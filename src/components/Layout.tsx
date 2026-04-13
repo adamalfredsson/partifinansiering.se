@@ -1,10 +1,11 @@
-import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Box, HStack, Link, Stack, Text, VStack } from "@chakra-ui/react";
+import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { YearProvider, useYear } from "../context/YearContext";
 import { getTranslation } from "../i18n/useTranslation";
 import { alternateLocalePath, homeRouteTo } from "../lib/locale-paths";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { RouterLink } from "./RouterLink";
 import { SiteLogo } from "./SiteLogo";
 import { YearSelector } from "./YearSelector";
 
@@ -79,9 +80,9 @@ function LayoutShell({
           gap={4}
         >
           <Box flexShrink={0}>
-            <Link to={homeTo} style={{ textDecoration: "none" }}>
+            <RouterLink to={homeTo} style={{ textDecoration: "none" }}>
               <SiteLogo size="sm" siteTitle={t("site.title")} />
-            </Link>
+            </RouterLink>
           </Box>
           <YearSelector
             years={years}
@@ -105,9 +106,9 @@ function LayoutShell({
         w="full"
       >
         <Box mb={{ base: 5, md: 12 }} maxW="2xl">
-          <Link to={homeTo} style={{ textDecoration: "none" }}>
+          <RouterLink to={homeTo} style={{ textDecoration: "none" }}>
             <SiteLogo siteTitle={t("site.title")} />
-          </Link>
+          </RouterLink>
         </Box>
         {children}
       </Box>
@@ -121,9 +122,9 @@ function LayoutShell({
             gap={8}
           >
             <VStack align="start" gap={4}>
-              <Link to={homeTo} style={{ textDecoration: "none" }}>
+              <RouterLink to={homeTo} style={{ textDecoration: "none" }}>
                 <SiteLogo size="md" siteTitle={t("site.title")} />
-              </Link>
+              </RouterLink>
               <Text
                 fontSize="sm"
                 lineHeight="relaxed"
@@ -134,7 +135,23 @@ function LayoutShell({
               </Text>
               <Text color="fg.muted" fontSize="xs">
                 © {new Date().getFullYear()} partifinansiering.se —{" "}
-                {t("footer.source")}
+                <Text
+                  asChild
+                  color="fg.muted"
+                  _hover={{ color: "fg" }}
+                  transition="color"
+                >
+                  <Link
+                    href="https://www.kammarkollegiet.se/vara-tjanster/insyn-i-partiers-finansiering/hitta-statistik-pa-redovisade-intakter/intaktsredovisningar-politiska-aktorer-2018-och-framat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("footer.source")}
+                  </Link>
+                </Text>
+              </Text>
+              <Text color="fg.muted" fontSize="xs">
+                {t("footer.dataUpdated", { date: "2026-03-28" })}
               </Text>
               <Text
                 fontSize="xs"
@@ -157,13 +174,27 @@ function LayoutShell({
                 _hover={{ color: "fg" }}
                 transition="color"
               >
-                <a
+                <Link
+                  href="https://statsbudget.se"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t("footer.budgetLink")}
+                </Link>
+              </Text>
+              <Text
+                asChild
+                color="fg.muted"
+                _hover={{ color: "fg" }}
+                transition="color"
+              >
+                <Link
                   href="https://zodiapps.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   {t("footer.builtBy")}
-                </a>
+                </Link>
               </Text>
             </VStack>
           </Stack>

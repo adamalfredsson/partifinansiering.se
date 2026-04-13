@@ -1,5 +1,5 @@
 import { Box, HStack } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
+import { RouterLink } from "./RouterLink";
 
 export type LanguageSwitcherProps = {
   currentLang: "sv" | "en";
@@ -34,7 +34,7 @@ export function LanguageSwitcher({
       {LANGS.map(({ code, label, flag }) => {
         const isActive = code === currentLang;
         return (
-          <Link
+          <RouterLink
             key={code}
             to={paths[code]}
             style={{ textDecoration: "none" }}
@@ -66,7 +66,7 @@ export function LanguageSwitcher({
                 {flag}
               </Box>
             </Box>
-          </Link>
+          </RouterLink>
         );
       })}
     </HStack>

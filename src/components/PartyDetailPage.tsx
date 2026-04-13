@@ -1,5 +1,4 @@
 import { Box, Grid, HStack, Text } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
 import { LuArrowLeft } from "react-icons/lu";
 import { useYear } from "../context/YearContext";
 import metaData from "../data/generated/meta.json";
@@ -18,6 +17,7 @@ import { OrganizationTable } from "./OrganizationTable";
 import { PartyLogo } from "./PartyLogo";
 import { RevenueBreakdown } from "./RevenueBreakdown";
 import { RevenueTrend } from "./RevenueTrend";
+import { RouterLink } from "./RouterLink";
 import { YearSelector } from "./YearSelector";
 
 const parties = partiesData as Party[];
@@ -86,7 +86,7 @@ export function PartyDetailPage({ lang, partySlug }: PartyDetailPageProps) {
           color="fg.subtle"
           _hover={{ color: "fg" }}
         >
-          <Link to={homeTo}>{t("party.back")}</Link>
+          <RouterLink to={homeTo}>{t("party.back")}</RouterLink>
         </Text>
       </HStack>
 

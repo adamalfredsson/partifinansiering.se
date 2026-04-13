@@ -1,17 +1,20 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Link } from "@chakra-ui/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { system } from "../theme";
 import { OrganizationTable } from "./OrganizationTable";
 import { TopDonorsCard } from "./TopDonorsCard";
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("./RouterLink", () => ({
+  RouterLink: ({
     children,
+    to: _to,
+    params: _params,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a {...props}>{children}</a>
-  ),
+  }: React.ComponentProps<typeof Link> & {
+    to?: unknown;
+    params?: unknown;
+  }) => <Link {...props}>{children}</Link>,
 }));
 
 function getRenderedTable(html: string): string {
